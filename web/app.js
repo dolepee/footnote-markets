@@ -80,6 +80,8 @@ const live = {
   },
 };
 
+let latestCycle = null;
+
 const usd = (value) => `$${Number(value).toFixed(value < 0.01 ? 4 : 2)}`;
 const arcscan = (tx) => `https://testnet.arcscan.app/tx/${tx}`;
 const xIntent = (text, url) =>
@@ -189,14 +191,33 @@ function renderSources() {
 
 function renderReceipts() {
   const receipts = [
-    ["Source bond registered", "register", "0.05 USDC bond locked", "pay"],
-    ["Citation paid", "pay", `${usd(live.price)} sent to creator`, "pay"],
-    ["Competitor refused", "refuse", "Overpriced for lower relevance", "refuse"],
-    ["Objective challenge", "challenge", `${usd(live.bond - live.remainingBond)} refunded from bond`, "challenge"],
+    { title: "Source bond registered", tx: live.txs.register, body: "0.05 USDC bond locked", badge: "pay" },
+    { title: "Citation paid", tx: live.txs.pay, body: `${usd(live.price)} sent to creator`, badge: "pay" },
+    { title: "Competitor refused", tx: live.txs.refuse, body: "Overpriced for lower relevance", badge: "refuse" },
+    {
+      title: "Objective challenge",
+      tx: live.txs.challenge,
+      body: `${usd(live.bond - live.remainingBond)} refunded from bond`,
+      badge: "challenge",
+    },
   ];
+
+  if (latestCycle?.txs?.length) {
+    const cycleBody = `${latestCycle.decisions?.length || 0} decision${
+      latestCycle.decisions?.length === 1 ? "" : "s"
+    }, ${usd(latestCycle.spent)} spent from a ${usd(latestCycle.budget)} budget`;
+    latestCycle.txs.forEach(({ label, tx }) => {
+      receipts.unshift({
+        title: `Latest agent cycle: ${label.replaceAll("_", " ")}`,
+        tx,
+        body: cycleBody,
+        badge: label.includes("pay") ? "pay" : "refuse",
+      });
+    });
+  }
+
   document.querySelector("#receipt-list").innerHTML = receipts
-    .map(([title, key, body, badge]) => {
-      const tx = live.txs[key];
+    .map(({ title, tx, body, badge }) => {
       return `
         <article class="receipt-card">
           <span class="badge ${badge}">${badge}</span>
@@ -264,6 +285,17 @@ async function loadPublicIntakeSources() {
     renderAgent();
   } catch {
     status.textContent = "Public intake is still open; GitHub source sync is temporarily unavailable.";
+  }
+}
+
+async function loadLatestCycle() {
+  try {
+    const response = await fetch("./data/latest-cycle.json");
+    if (!response.ok) return;
+    latestCycle = await response.json();
+    renderReceipts();
+  } catch {
+    latestCycle = null;
   }
 }
 
@@ -335,3 +367,4 @@ renderSources();
 renderReceipts();
 renderAgent();
 loadPublicIntakeSources();
+loadLatestCycle();

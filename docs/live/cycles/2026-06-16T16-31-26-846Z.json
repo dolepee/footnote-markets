@@ -1,0 +1,36 @@
+{
+  "chainId": 5042002,
+  "market": "0xe12bced9df4d1347a998499d1c2f559fa1594d21",
+  "actor": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+  "query": "Why do nanopayments unlock creator markets for AI agents?",
+  "budget": "0.05",
+  "spent": "0.003",
+  "dryRun": false,
+  "decisions": [
+    {
+      "sourceId": "1",
+      "creator": "Footnote spike source",
+      "title": "Why nanopayments unlock creator markets",
+      "decision": "PAY",
+      "score": 61,
+      "price": "0.003",
+      "onchain": {
+        "price": "0.003",
+        "bond": "0.047",
+        "reputation": "-10",
+        "active": true
+      }
+    }
+  ],
+  "txs": [
+    {
+      "label": "approve_cycle_spend",
+      "tx": "0x53fa7898be2048617d68593b1014b93f73171412b267c56cb54f7d50e9808890"
+    },
+    {
+      "label": "pay_source_1",
+      "tx": "0xad24510630882c40e8d266adb16067a1e83abd8e72efbe4f647e2a6b5db2e1bb"
+    }
+  ],
+  "completedAt": "2026-06-16T16:31:26.845Z"
+}

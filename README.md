@@ -31,6 +31,16 @@ The first live spike passed on Arc testnet:
 
 Full transaction record: `docs/live/spike-arc-testnet.json`.
 
+The first autonomous buyer-agent cycle also passed on Arc testnet:
+
+- Query: `Why do nanopayments unlock creator markets for AI agents?`
+- Budget: `0.05` USDC.
+- Decision: PAY source `1`.
+- Spend: `0.003` USDC.
+- Pay tx: `0xad24510630882c40e8d266adb16067a1e83abd8e72efbe4f647e2a6b5db2e1bb`.
+
+Latest cycle record: `docs/live/latest-cycle.json`.
+
 ## Structure
 
 - `contracts/`: Foundry contracts for bonded source registration, citation payment, objective challenge, refunds, and reputation.
@@ -51,3 +61,13 @@ npm run web:dev
 ```
 
 Then open `http://localhost:4173`.
+
+## Operator Loop
+
+```bash
+npm run intake:fetch
+npm run source:register -- --issue <github-issue-number>
+npm run agent:cycle -- --query "Why do nanopayments matter for creator publishing?" --budget 0.05
+```
+
+`source:register` and live `agent:cycle` require `ARC_RPC_URL`, `PRIVATE_KEY`, and the deployed market address via `FOOTNOTE_MARKET` or `docs/live/arc-testnet.json`. Use `agent:cycle -- --dry-run` to test decisions without sending transactions.
