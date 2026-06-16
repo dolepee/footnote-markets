@@ -32,6 +32,7 @@ Full transaction record: `docs/live/spike-arc-testnet.json`.
 ## Structure
 
 - `contracts/`: Foundry contracts for bonded source registration, citation payment, objective challenge, refunds, and reputation.
+- `web/`: dependency-free static product shell for the buyer-agent market, source registry, and receipt ledger.
 - `docs/`: implementation notes and live deployment records.
 
 ## Local Contract Test
@@ -40,3 +41,11 @@ Full transaction record: `docs/live/spike-arc-testnet.json`.
 cd contracts
 forge test
 ```
+
+## Local Web
+
+```bash
+npm run web:dev
+```
+
+Then open `http://localhost:4173`.

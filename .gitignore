@@ -7,5 +7,6 @@ dist/
 out/
 cache/
 broadcast/
+docs/screens/
 .DS_Store
 *.log

@@ -7,10 +7,10 @@
     "contracts:test": "cd contracts && forge test",
     "contracts:build": "cd contracts && forge build",
     "deploy:market": "node scripts/deploy-footnote-market.mjs",
-    "spike:live": "node scripts/run-live-spike.mjs"
+    "spike:live": "node scripts/run-live-spike.mjs",
+    "web:dev": "cd web && python3 -m http.server 4173"
   },
   "dependencies": {
     "viem": "^2.44.0"
   }
 }
-

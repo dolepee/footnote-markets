@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Footnote Markets is a bonded citation market where AI agents pay creators when they cite their work."
+    />
+    <title>Footnote Markets</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Footnote Markets home">
+        <span class="brand-mark">F</span>
+        <span><strong>Footnote</strong><small>Markets</small></span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#market">Market</a>
+        <a href="#ask">Ask</a>
+        <a href="#sources">Sources</a>
+        <a href="#receipts">Receipts</a>
+        <a href="#docs">Docs</a>
+      </nav>
+      <a class="network-pill" href="https://testnet.arcscan.app" target="_blank" rel="noreferrer">
+        <span></span>Arc Testnet
+      </a>
+    </header>
+
+    <main id="top" class="page-shell">
+      <section class="hero">
+        <div>
+          <span class="eyebrow">Bonded citation market</span>
+          <h1>AI agents should <span class="gradient-text">pay their sources.</span></h1>
+          <p class="lead">
+            Footnote Markets lets a buyer agent allocate a USDC budget across creator sources, pay the trustworthy
+            ones, refuse weak or overpriced sources, and keep an Arc receipt for every decision.
+          </p>
+          <div class="action-row">
+            <a class="btn primary" href="#ask">Run buyer agent</a>
+            <a class="btn" href="#sources">Register source</a>
+          </div>
+        </div>
+
+        <aside class="terminal" aria-label="Live product preview">
+          <div class="terminal-top">
+            <strong>Buyer agent session</strong>
+            <span class="badge pay">Live Arc proof</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-menu">
+              <span class="active">Market</span>
+              <span>Sources</span>
+              <span>Receipts</span>
+              <span>Reputation</span>
+            </div>
+            <div class="terminal-main">
+              <span class="label">Query</span>
+              <h2>Why do nanopayments matter for creator publishing?</h2>
+              <div class="decision-row">
+                <div class="decision-card"><span class="label">Budget</span><b>$0.05</b></div>
+                <div class="decision-card"><span class="label">Paid</span><b>1 source</b></div>
+                <div class="decision-card"><span class="label">Refused</span><b>1 source</b></div>
+              </div>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <span class="badge pay">PAY</span>
+                  <span>Why nanopayments unlock creator markets</span>
+                  <span class="mono">$0.003</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="badge refuse">REFUSE</span>
+                  <span>Overpriced competitor source</span>
+                  <span class="mono">receipt</span>
+                </div>
+                <div class="timeline-item">
+                  <span class="badge challenge">SLASH</span>
+                  <span>Objective hash-change challenge refunded buyer</span>
+                  <span class="mono">$0.003</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="stats-grid" id="market">
+        <div class="stat-card"><small>Arc market</small><strong class="mono">0xe12b...4d21</strong></div>
+        <div class="stat-card"><small>Live citation</small><strong>$0.003</strong></div>
+        <div class="stat-card"><small>Source bond</small><strong>$0.05</strong></div>
+        <div class="stat-card"><small>Objective refund</small><strong>$0.003</strong></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Not a paywall. A market for AI attention.</h2>
+          <a class="btn" href="#receipts">View receipts</a>
+        </div>
+        <div class="feature-grid">
+          <article class="panel">
+            <span class="label">01</span>
+            <h3>Creators register sources</h3>
+            <p>Each source has a price, content hash, wallet, and optional credibility bond.</p>
+          </article>
+          <article class="panel">
+            <span class="label">02</span>
+            <h3>Buyer agent allocates budget</h3>
+            <p>The agent decides PAY, REFUSE, SKIP, or CACHE from relevance, price, bond, and reputation.</p>
+          </article>
+          <article class="panel">
+            <span class="label">03</span>
+            <h3>Arc settles citation payments</h3>
+            <p>Paid sources receive USDC, and every decision leaves a product receipt.</p>
+          </article>
+          <article class="panel">
+            <span class="label">04</span>
+            <h3>Facts can slash. Opinions cannot.</h3>
+            <p>Objective failures refund from bond; subjective quality only changes reputation.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section two-col" id="ask">
+        <div class="panel">
+          <span class="label">Buyer agent</span>
+          <h2>Ask with a budget.</h2>
+          <form class="form-grid" id="ask-form">
+            <label class="field">
+              <span class="label">Research query</span>
+              <textarea id="query">Why do nanopayments matter for creator publishing?</textarea>
+            </label>
+            <label class="field">
+              <span class="label">USDC budget: <span id="budget-label">$0.050</span></span>
+              <input id="budget" type="range" min="0.005" max="0.08" value="0.05" step="0.001" />
+            </label>
+            <button class="btn primary" type="submit">Run buyer agent</button>
+          </form>
+          <div class="decision-row">
+            <div class="decision-card"><span class="label">Paid</span><b id="paid-count">0</b></div>
+            <div class="decision-card"><span class="label">Refused</span><b id="refused-count">0</b></div>
+            <div class="decision-card"><span class="label">Spent</span><b id="spent-total">$0</b></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <span class="label">Agent decisions</span>
+          <div class="timeline" id="decisions"></div>
+          <div class="answer-box">
+            <span class="label">Answer with paid footnotes</span>
+            <p id="answer">
+              Run the agent to see paid citations, refusals, and the answer it is willing to stand behind.
+            </p>
+            <div class="receipt-meta" id="answer-footnotes"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <div class="section-head">
+          <h2>Founding sources.</h2>
+          <span class="eyebrow">Creator supply</span>
+        </div>
+        <div class="two-col">
+          <form class="panel form-grid" id="source-form">
+            <span class="label">Register source locally</span>
+            <h3>Make your writing citeable.</h3>
+            <label class="field"><span class="label">Creator</span><input id="creator" placeholder="e.g. qdee" /></label>
+            <label class="field"><span class="label">Source title</span><input id="title" placeholder="Your post or article" /></label>
+            <label class="field"><span class="label">Price per citation</span><input id="price" value="0.004" inputmode="decimal" /></label>
+            <label class="field"><span class="label">Optional bond</span><input id="bond" value="0.01" inputmode="decimal" /></label>
+            <button class="btn primary" type="submit">Add source</button>
+            <p>Next build step: persist this to a real database and contract registration flow.</p>
+          </form>
+          <div class="source-grid single" id="source-list"></div>
+        </div>
+      </section>
+
+      <section class="section" id="receipts">
+        <div class="section-head">
+          <h2>Receipts that creators and agents can understand.</h2>
+          <span class="eyebrow">Live Arc spike</span>
+        </div>
+        <div class="receipt-grid" id="receipt-list"></div>
+      </section>
+
+      <section class="section" id="docs">
+        <div class="section-head">
+          <h2>Judge path.</h2>
+        </div>
+        <div class="feature-grid three">
+          <article class="panel">
+            <span class="label">01</span>
+            <h3>Try the product</h3>
+            <p>Run the buyer agent and see PAY, REFUSE, and paid footnotes under budget.</p>
+            <a class="btn" href="#ask">Open ask flow</a>
+          </article>
+          <article class="panel">
+            <span class="label">02</span>
+            <h3>Check Arc proof</h3>
+            <p>Market: <span class="mono break">0xe12bced9df4d1347a998499d1c2f559fa1594d21</span></p>
+            <a class="btn" href="#receipts">Open receipts</a>
+          </article>
+          <article class="panel">
+            <span class="label">03</span>
+            <h3>Run contracts</h3>
+            <pre class="panel mono">cd contracts
+forge test</pre>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
