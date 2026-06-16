@@ -68,9 +68,33 @@ function scoreSource(source, onchain = {}) {
 }
 
 function decisionFor(score, price, spent) {
-  if (score >= 34 && spent + price <= budget) return "PAY";
-  if (score >= 18) return "REFUSE";
-  return "SKIP";
+  if (score >= 34 && spent + price <= budget) {
+    return { decision: "PAY", reason: "Relevance, economic trust, and budget all cleared." };
+  }
+  if (score >= 18) {
+    return {
+      decision: "REFUSE",
+      reason:
+        spent + price > budget
+          ? "Useful source, but paying it would exceed the remaining budget."
+          : "Reviewable source, but score did not clear the PAY threshold.",
+    };
+  }
+  return { decision: "SKIP", reason: "Score below the review band for this query." };
+}
+
+function reasonPayload(item) {
+  return {
+    query,
+    sourceId: String(item.source.sourceId),
+    title: item.source.title,
+    decision: item.decision,
+    reason: item.reason,
+    score: item.score,
+    price: usdcString(item.price),
+    bond: item.onchain.bond ?? item.source.bond ?? "0",
+    reputation: item.onchain.reputation ?? "0",
+  };
 }
 
 const artifact = loadMarketArtifact();
@@ -116,9 +140,9 @@ for (const source of activeRegistry) {
 
   const price = usdcUnits(onchain.price);
   const score = scoreSource(source, onchain);
-  const decision = decisionFor(score, price, spent);
+  const { decision, reason } = decisionFor(score, price, spent);
   if (decision === "PAY") spent += price;
-  decisions.push({ source, onchain, score, decision, price });
+  decisions.push({ source, onchain, score, decision, reason, price });
 }
 
 const payable = decisions.filter((item) => item.decision === "PAY");
@@ -166,7 +190,7 @@ for (const item of decisions) {
   if (dryRun) continue;
   const sourceId = BigInt(item.source.sourceId);
   const queryHash = hashText(query);
-  const reasonHash = hashText(`${item.decision}:${item.score}:${item.source.title}`);
+  const reasonHash = hashText(JSON.stringify(reasonPayload(item)));
 
   if (item.decision === "PAY") {
     txs.push({
@@ -216,6 +240,8 @@ const cycle = {
     creator: item.source.creator,
     title: item.source.title,
     decision: item.decision,
+    reason: item.reason,
+    reasonHash: hashText(JSON.stringify(reasonPayload(item))),
     score: item.score,
     price: usdcString(item.price),
     onchain: item.onchain,
