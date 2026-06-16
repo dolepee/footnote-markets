@@ -25,12 +25,33 @@ const args = new Map(
 const query = args.get("query") || "Why do nanopayments matter for creator publishing?";
 const budget = usdcUnits(args.get("budget") || "0.05");
 const dryRun = args.get("dry-run") === "true";
+const requireExternal = args.get("require-external") === "true";
 const marketAddress = process.env.FOOTNOTE_MARKET || readJson(resolve(root, "docs/live/arc-testnet.json"), {}).market;
 const usdcAddress = process.env.ARC_USDC || "0x3600000000000000000000000000000000000000";
 const registry = readJson(resolve(root, "docs/live/registered-sources.json"), []);
 
 if (!marketAddress) throw new Error("FOOTNOTE_MARKET or docs/live/arc-testnet.json market is required");
 if (registry.length === 0) throw new Error("No registered sources. Run scripts/register-creator-source.mjs first.");
+
+const activeRegistry = requireExternal
+  ? registry.filter((source) => source.issue || source.issueUrl || !source.sourceUrl?.includes("example.com/footnote"))
+  : registry;
+
+if (activeRegistry.length === 0) {
+  console.log(
+    JSON.stringify(
+      {
+        skipped: true,
+        reason: "No external registered creator sources yet.",
+        requireExternal,
+        checkedAt: new Date().toISOString(),
+      },
+      null,
+      2,
+    ),
+  );
+  process.exit(0);
+}
 
 function scoreSource(source, onchain = {}) {
   const haystack = `${source.title} ${source.summary || ""}`.toLowerCase();
@@ -70,7 +91,7 @@ if (!dryRun) {
 let spent = 0n;
 const decisions = [];
 
-for (const source of registry) {
+for (const source of activeRegistry) {
   let onchain = {
     price: source.price,
     bond: source.bond,

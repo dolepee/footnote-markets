@@ -1,0 +1,49 @@
+name: Footnote buyer-agent cycle
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: footnote-buyer-agent-cycle
+  cancel-in-progress: false
+
+jobs:
+  run-cycle:
+    runs-on: ubuntu-latest
+    env:
+      ARC_RPC_URL: ${{ secrets.ARC_RPC_URL }}
+      ARC_USDC: ${{ secrets.ARC_USDC }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      FOOTNOTE_MARKET: ${{ secrets.FOOTNOTE_MARKET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Run external-source buyer cycle
+        run: >
+          npm run agent:cycle -- --require-external --query
+          "What should an AI agent cite about nanopayments and creator monetization?"
+          --budget 0.05
+
+      - name: Commit cycle receipt
+        run: |
+          if [ -n "$(git status --porcelain docs/live web/data)" ]; then
+            git config user.name "footnote-agent"
+            git config user.email "footnote-agent@users.noreply.github.com"
+            git add docs/live web/data
+            git commit -m "Record scheduled Footnote agent cycle"
+            git push
+          else
+            echo "No cycle receipt changes to commit."
+          fi
