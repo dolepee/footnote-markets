@@ -1,0 +1,17 @@
+{
+  "name": "Footnote Markets",
+  "short_name": "Footnote",
+  "description": "A bonded citation market where AI agents pay creators when they cite their work.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070a12",
+  "theme_color": "#070a12",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1200, initial-scale=1" />
+    <title>Footnote Markets Social Card</title>
+    <style>
+      :root {
+        --bg: #070a12;
+        --ink: #f8fafc;
+        --muted: #a9b7cc;
+        --blue: #4f7cff;
+        --cyan: #5df4ff;
+        --green: #62f4a7;
+        --yellow: #facc15;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 675px;
+        overflow: hidden;
+        color: var(--ink);
+        font-family: "Space Grotesk", "Avenir Next", sans-serif;
+        background:
+          radial-gradient(circle at 12% 8%, rgba(93, 244, 255, 0.24), transparent 360px),
+          radial-gradient(circle at 78% 8%, rgba(79, 124, 255, 0.32), transparent 420px),
+          linear-gradient(135deg, #08101f 0%, #070a12 56%, #05070d 100%);
+      }
+
+      .card {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 64px 72px;
+      }
+
+      .grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.22;
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.18) 1px, transparent 1px);
+        background-size: 56px 56px;
+      }
+
+      .brand,
+      .pill,
+      .receipt,
+      .metric {
+        position: relative;
+        z-index: 1;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 30px;
+        font-weight: 900;
+      }
+
+      .mark {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        place-items: center;
+        border-radius: 18px;
+        color: #06111f;
+        background: linear-gradient(135deg, var(--cyan), var(--green));
+      }
+
+      .pill {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 52px;
+        padding: 12px 18px;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 999px;
+        color: #c7d2fe;
+        font-size: 15px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        background: rgba(79, 124, 255, 0.14);
+      }
+
+      .pill::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 24px var(--green);
+      }
+
+      h1 {
+        position: relative;
+        z-index: 1;
+        max-width: 650px;
+        margin: 28px 0 0;
+        font-size: 76px;
+        line-height: 0.9;
+        letter-spacing: -0.07em;
+      }
+
+      h1 span {
+        color: transparent;
+        background: linear-gradient(90deg, var(--cyan), var(--green));
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+
+      .receipt {
+        position: absolute;
+        right: 72px;
+        top: 104px;
+        width: 360px;
+        padding: 28px;
+        border: 1px solid rgba(93, 244, 255, 0.28);
+        border-radius: 30px;
+        background: rgba(8, 15, 31, 0.9);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      }
+
+      .receipt h2 {
+        margin: 16px 0 18px;
+        font-size: 42px;
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-top: 1px solid rgba(148, 163, 184, 0.18);
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .row strong {
+        color: var(--ink);
+      }
+
+      .pay {
+        color: #06111f;
+        background: var(--green);
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-weight: 1000;
+        letter-spacing: 0.08em;
+      }
+
+      .metrics {
+        position: absolute;
+        left: 72px;
+        bottom: 42px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        width: 720px;
+      }
+
+      .metric {
+        padding: 18px 20px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.72);
+      }
+
+      .metric small {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 28px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="grid"></div>
+      <div class="brand"><span class="mark">F</span> Footnote Markets</div>
+      <div class="pill">Lepton Agents Hackathon</div>
+      <h1>AI agents should <span>pay their sources.</span></h1>
+      <aside class="receipt">
+        <span class="pay">PAY</span>
+        <h2>Latest buyer-agent cycle</h2>
+        <div class="row"><span>Budget</span><strong>$0.05</strong></div>
+        <div class="row"><span>Citation paid</span><strong>$0.003</strong></div>
+        <div class="row"><span>Settlement</span><strong>Arc USDC</strong></div>
+      </aside>
+      <section class="metrics">
+        <div class="metric"><small>Market</small><strong>0xe12b...4d21</strong></div>
+        <div class="metric"><small>Source bond</small><strong>$0.047</strong></div>
+        <div class="metric"><small>Proof</small><strong>Live receipt</strong></div>
+      </section>
+    </main>
+  </body>
+</html>

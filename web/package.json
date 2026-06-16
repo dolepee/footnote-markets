@@ -2,6 +2,6 @@
   "name": "footnote-markets-web",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp index.html styles.css app.js favicon.svg dist/ && if [ -d data ]; then cp -R data dist/data; fi"
+    "build": "rm -rf dist && mkdir -p dist && cp index.html styles.css app.js favicon.svg manifest.webmanifest og.png dist/ && if [ -d data ]; then cp -R data dist/data; fi"
   }
 }
