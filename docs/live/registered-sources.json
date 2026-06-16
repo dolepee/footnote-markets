@@ -1,7 +1,7 @@
 [
   {
     "chainId": 5042002,
-    "market": "0xe12bced9df4d1347a998499d1c2f559fa1594d21",
+    "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
     "sourceId": "1",
     "creator": "Footnote spike source",
     "title": "Why nanopayments unlock creator markets",
@@ -13,9 +13,9 @@
     "issue": null,
     "issueUrl": "",
     "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
-    "registeredAt": "2026-06-16T00:00:00.000Z",
+    "registeredAt": "2026-06-16T17:17:10.972Z",
     "txs": {
-      "register": "0xa6c07171e79292a6bfecca876bdff2ac6b936e09d59dd958ea4e1768596a49f1"
+      "register": "0xe688faa49d6a91a6d04813c24cca86ee97e33565a6df964a5605d8f8443a73a9"
     }
   }
 ]

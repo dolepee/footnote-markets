@@ -11,23 +11,24 @@ Live product shell: https://footnote-markets.vercel.app
 This repository is in the first validation spike:
 
 1. Register a creator source with an optional credibility bond.
-2. Record a buyer agent PAY or REFUSE decision under a budget.
+2. Require an authorized, bonded buyer agent before it can record PAY or REFUSE decisions.
 3. Settle a tiny USDC citation payment.
-4. Trigger one objective challenge when a paid source hash changes.
-5. Refund the buyer from the source bond and update reputation.
+4. Trigger one V1 objective challenge when a paid source hash changes after citation.
+5. Refund the buyer from the source bond, slash the buyer agent's bond, and update source + agent reputation.
 
-Subjective quality never auto-slashes. Stake moves only on mechanically checkable failures; judgment changes reputation.
+Subjective quality never auto-slashes. V1 stake movement is limited to the mechanically checkable hash-change failure; broader objective failures can be added later with explicit attestations.
 
 ## Arc Testnet Status
 
 The first live spike passed on Arc testnet:
 
-- Market: `0xe12bced9df4d1347a998499d1c2f559fa1594d21`
+- Market: `0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e`
 - Source registered with a `0.05` USDC bond.
 - One paid citation settled for `0.003` USDC.
 - One REFUSE receipt was recorded.
 - One objective hash-change challenge refunded `0.003` USDC from the bond.
 - Source reputation moved to `-10`; remaining bond is `0.047` USDC.
+- Current contract version requires a bonded authorized agent for PAY/REFUSE and reduces both source and agent reputation when a paid citation is objectively slashed.
 
 Full transaction record: `docs/live/spike-arc-testnet.json`.
 
@@ -37,7 +38,7 @@ The first autonomous buyer-agent cycle also passed on Arc testnet:
 - Budget: `0.05` USDC.
 - Decision: PAY source `1`.
 - Spend: `0.003` USDC.
-- Pay tx: `0xad24510630882c40e8d266adb16067a1e83abd8e72efbe4f647e2a6b5db2e1bb`.
+- Pay tx: `0x1b16eef84f7c5add1a60dffc72f6c6bcc15a1df72b767af1ecb65da5eebc931e`.
 
 Latest cycle record: `docs/live/latest-cycle.json`.
 

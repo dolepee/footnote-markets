@@ -1,11 +1,13 @@
 {
   "chainId": 5042002,
-  "market": "0xe12bced9df4d1347a998499d1c2f559fa1594d21",
+  "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
   "actor": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
   "query": "Why do nanopayments unlock creator markets for AI agents?",
   "budget": "0.05",
   "spent": "0.003",
   "dryRun": false,
+  "startingAgentBond": "0.097",
+  "finalAgentBond": "0.097",
   "decisions": [
     {
       "sourceId": "1",
@@ -24,13 +26,13 @@
   ],
   "txs": [
     {
-      "label": "approve_cycle_spend",
-      "tx": "0x53fa7898be2048617d68593b1014b93f73171412b267c56cb54f7d50e9808890"
+      "label": "approve_cycle_spend_and_bond",
+      "tx": "0x10bcb0619570817ecfc7435fb30817e3f35d4a80fbc16e94d4ad9424b964451c"
     },
     {
       "label": "pay_source_1",
-      "tx": "0xad24510630882c40e8d266adb16067a1e83abd8e72efbe4f647e2a6b5db2e1bb"
+      "tx": "0x1b16eef84f7c5add1a60dffc72f6c6bcc15a1df72b767af1ecb65da5eebc931e"
     }
   ],
-  "completedAt": "2026-06-16T16:31:26.845Z"
+  "completedAt": "2026-06-16T17:18:32.950Z"
 }

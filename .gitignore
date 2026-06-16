@@ -7,6 +7,8 @@ dist/
 out/
 cache/
 broadcast/
+contracts/cache/
+contracts/out/
 docs/screens/
 .vercel/
 web/.vercel/

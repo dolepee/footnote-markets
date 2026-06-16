@@ -26,6 +26,7 @@ const query = args.get("query") || "Why do nanopayments matter for creator publi
 const budget = usdcUnits(args.get("budget") || "0.05");
 const dryRun = args.get("dry-run") === "true";
 const requireExternal = args.get("require-external") === "true";
+const agentBondDeposit = usdcUnits(args.get("agent-bond") || "0.10");
 const marketAddress = process.env.FOOTNOTE_MARKET || readJson(resolve(root, "docs/live/arc-testnet.json"), {}).market;
 const usdcAddress = process.env.ARC_USDC || "0x3600000000000000000000000000000000000000";
 const registry = readJson(resolve(root, "docs/live/registered-sources.json"), []);
@@ -123,15 +124,40 @@ for (const source of activeRegistry) {
 const payable = decisions.filter((item) => item.decision === "PAY");
 const totalApproval = payable.reduce((sum, item) => sum + item.price, 0n);
 const txs = [];
+let startingAgentBond = 0n;
+let finalAgentBond = 0n;
+let agentBondNeeded = 0n;
 
-if (!dryRun && totalApproval > 0n) {
+if (!dryRun) {
+  startingAgentBond = await publicClient.readContract({
+    address: marketAddress,
+    abi: artifact.abi,
+    functionName: "agentBonds",
+    args: [account.address],
+  });
+  agentBondNeeded = startingAgentBond === 0n ? agentBondDeposit : 0n;
+}
+
+if (!dryRun && totalApproval + agentBondNeeded > 0n) {
   txs.push({
-    label: "approve_cycle_spend",
-    tx: await send(publicClient, walletClient, "approve_cycle_spend", {
+    label: "approve_cycle_spend_and_bond",
+    tx: await send(publicClient, walletClient, "approve_cycle_spend_and_bond", {
       address: usdcAddress,
       abi: erc20Abi,
       functionName: "approve",
-      args: [marketAddress, totalApproval],
+      args: [marketAddress, totalApproval + agentBondNeeded],
+    }),
+  });
+}
+
+if (!dryRun && agentBondNeeded > 0n) {
+  txs.push({
+    label: "deposit_agent_bond",
+    tx: await send(publicClient, walletClient, "deposit_agent_bond", {
+      address: marketAddress,
+      abi: artifact.abi,
+      functionName: "depositAgentBond",
+      args: [agentBondNeeded],
     }),
   });
 }
@@ -166,6 +192,15 @@ for (const item of decisions) {
   }
 }
 
+if (!dryRun) {
+  finalAgentBond = await publicClient.readContract({
+    address: marketAddress,
+    abi: artifact.abi,
+    functionName: "agentBonds",
+    args: [account.address],
+  });
+}
+
 const cycle = {
   chainId,
   market: marketAddress,
@@ -174,6 +209,8 @@ const cycle = {
   budget: usdcString(budget),
   spent: usdcString(spent),
   dryRun,
+  startingAgentBond: usdcString(startingAgentBond),
+  finalAgentBond: usdcString(finalAgentBond),
   decisions: decisions.map((item) => ({
     sourceId: item.source.sourceId,
     creator: item.source.creator,

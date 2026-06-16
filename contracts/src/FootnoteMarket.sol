@@ -40,11 +40,16 @@ contract FootnoteMarket {
     }
 
     IERC20 public immutable USDC;
+    address public owner;
     uint256 public nextSourceId = 1;
     uint256 public nextReceiptId = 1;
+    uint256 public agentPenaltyPool;
 
     mapping(uint256 => Source) public sources;
     mapping(uint256 => Receipt) public receipts;
+    mapping(address => bool) public authorizedAgents;
+    mapping(address => uint256) public agentBonds;
+    mapping(address => int256) public agentReputation;
 
     event SourceRegistered(
         uint256 indexed sourceId,
@@ -82,10 +87,18 @@ contract FootnoteMarket {
         bytes32 currentHash
     );
     event ReputationMoved(uint256 indexed sourceId, int256 newReputation);
+    event AgentAuthorizationSet(address indexed agent, bool authorized);
+    event AgentBondDeposited(address indexed agent, uint256 amount, uint256 totalBond);
+    event AgentBondSlashed(address indexed agent, uint256 amount, uint256 remainingBond);
+    event AgentReputationMoved(address indexed agent, int256 newReputation);
 
     error InvalidSource();
     error InvalidDecision();
+    error InvalidAmount();
+    error OnlyOwner();
     error Unauthorized();
+    error UnauthorizedAgent();
+    error UnbondedAgent();
     error InactiveSource();
     error NotPaidReceipt();
     error AlreadyChallenged();
@@ -94,6 +107,43 @@ contract FootnoteMarket {
 
     constructor(address _usdc) {
         USDC = IERC20(_usdc);
+        owner = msg.sender;
+        authorizedAgents[msg.sender] = true;
+        emit AgentAuthorizationSet(msg.sender, true);
+    }
+
+    modifier onlyOwner() {
+        _onlyOwner();
+        _;
+    }
+
+    modifier onlyAuthorizedBondedAgent() {
+        _onlyAuthorizedBondedAgent();
+        _;
+    }
+
+    function _onlyOwner() internal view {
+        if (msg.sender != owner) revert OnlyOwner();
+    }
+
+    function _onlyAuthorizedBondedAgent() internal view {
+        if (!authorizedAgents[msg.sender]) revert UnauthorizedAgent();
+        if (agentBonds[msg.sender] == 0) revert UnbondedAgent();
+    }
+
+    function setAuthorizedAgent(address agent, bool authorized) external onlyOwner {
+        if (agent == address(0)) revert UnauthorizedAgent();
+        authorizedAgents[agent] = authorized;
+        emit AgentAuthorizationSet(agent, authorized);
+    }
+
+    function depositAgentBond(uint256 amount) external {
+        if (!authorizedAgents[msg.sender]) revert UnauthorizedAgent();
+        if (amount == 0) revert InvalidAmount();
+        if (!USDC.transferFrom(msg.sender, address(this), amount)) revert TokenTransferFailed();
+
+        agentBonds[msg.sender] += amount;
+        emit AgentBondDeposited(msg.sender, amount, agentBonds[msg.sender]);
     }
 
     function registerSource(
@@ -131,7 +181,7 @@ contract FootnoteMarket {
         uint256 sourceId,
         bytes32 queryHash,
         bytes32 reasonHash
-    ) external returns (uint256 receiptId) {
+    ) external onlyAuthorizedBondedAgent returns (uint256 receiptId) {
         Source storage source = sources[sourceId];
         if (!source.active) revert InactiveSource();
 
@@ -170,7 +220,7 @@ contract FootnoteMarket {
         Decision decision,
         bytes32 queryHash,
         bytes32 reasonHash
-    ) external returns (uint256 receiptId) {
+    ) external onlyAuthorizedBondedAgent returns (uint256 receiptId) {
         if (decision == Decision.PAY) revert InvalidDecision();
         Source storage source = sources[sourceId];
         if (!source.active) revert InactiveSource();
@@ -223,6 +273,15 @@ contract FootnoteMarket {
 
         if (refundAmount > 0 && !USDC.transfer(receipt.buyer, refundAmount)) revert TokenTransferFailed();
 
+        uint256 agentSlash = refundAmount <= agentBonds[receipt.buyer] ? refundAmount : agentBonds[receipt.buyer];
+        if (agentSlash > 0) {
+            agentBonds[receipt.buyer] -= agentSlash;
+            agentPenaltyPool += agentSlash;
+            emit AgentBondSlashed(receipt.buyer, agentSlash, agentBonds[receipt.buyer]);
+        }
+
+        agentReputation[receipt.buyer] -= 10;
+
         emit ObjectiveChallengeResolved(
             receiptId,
             receipt.sourceId,
@@ -232,5 +291,6 @@ contract FootnoteMarket {
             source.contentHash
         );
         emit ReputationMoved(receipt.sourceId, source.reputation);
+        emit AgentReputationMoved(receipt.buyer, agentReputation[receipt.buyer]);
     }
 }

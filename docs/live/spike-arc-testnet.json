@@ -1,22 +1,26 @@
 {
   "chainId": 5042002,
-  "market": "0xe12bced9df4d1347a998499d1c2f559fa1594d21",
+  "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
   "actor": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
   "sourceId": "1",
   "paidReceiptId": "1",
   "price": "0.003",
   "bond": "0.05",
+  "agentBond": "0.1",
+  "finalAgentBond": "0.097",
+  "agentReputation": "-10",
   "remainingBond": "0.047",
   "reputation": "-10",
-  "startingBalance": "1.80543",
-  "endingBalance": "1.738543",
+  "startingBalance": "1.580034",
+  "endingBalance": "1.410042",
   "txs": {
-    "approve": "0x87027d185a10f4215b4e94d39198b10b4b92656666f6e4c4703f8cffe1fe3314",
-    "register": "0xa6c07171e79292a6bfecca876bdff2ac6b936e09d59dd958ea4e1768596a49f1",
-    "pay": "0xf4f8f9fb122a88981a7a74a07480c1138993150dce34ebcce657d06912547bd9",
-    "refuse": "0x2af0942ceb5b0333019353473121f1749e6ef05869ca8af404866e822070a8b3",
-    "updateHash": "0xf397f754b4e48144929c27ef284a7fcb82ed8a6ad6fbcdcd115e6a167156daae",
-    "challenge": "0x078b8b8ce02c1d2f620c45f1ae48bf898e03f6eb9b1fae5269fba41ec08b0246"
+    "approve": "0x28da1edde9638fee3f4ed92def61f87def26c888b630d08c02b7deafbca3206e",
+    "agentBond": "0x07846419f538e9f6105985ed09a02cade3e1df72e5e4ccfbd162004551ec1ae0",
+    "register": "0xe688faa49d6a91a6d04813c24cca86ee97e33565a6df964a5605d8f8443a73a9",
+    "pay": "0x305b6b541236a579a7bd8fc208694a51e64e2f4c8df2c4095ef2a392872cc09c",
+    "refuse": "0xd6a42ceab00abdeb22f93fc2da63c718e24120de755c99081381cd9d1b25268a",
+    "updateHash": "0x6e798b3e4cb521d46dbc47416d757494772487fa93dea14cd0a863feea8ede99",
+    "challenge": "0x325830899d1076800c18846153403ab4faa9263bd7d93c5355c51485ae2a7eef"
   },
-  "completedAt": "2026-06-16T10:50:33.478Z"
+  "completedAt": "2026-06-16T17:17:10.972Z"
 }

@@ -76,7 +76,8 @@ if (chainId !== arcTestnet.id) throw new Error(`Wrong chain ${chainId}; expected
 
 const price = parseUnits("0.003", 6);
 const bond = parseUnits("0.05", 6);
-const totalApproval = price + bond;
+const agentBond = parseUnits("0.10", 6);
+const totalApproval = price + bond + agentBond;
 const sourceId = await publicClient.readContract({
   address: marketAddress,
   abi: marketArtifact.abi,
@@ -99,6 +100,13 @@ const approveTx = await send("approve", {
   abi: erc20Abi,
   functionName: "approve",
   args: [marketAddress, totalApproval],
+});
+
+const agentBondTx = await send("agent_bond", {
+  address: marketAddress,
+  abi: marketArtifact.abi,
+  functionName: "depositAgentBond",
+  args: [agentBond],
 });
 
 const registerTx = await send("register", {
@@ -164,6 +172,20 @@ const source = await publicClient.readContract({
   args: [sourceId],
 });
 
+const finalAgentBond = await publicClient.readContract({
+  address: marketAddress,
+  abi: marketArtifact.abi,
+  functionName: "agentBonds",
+  args: [account.address],
+});
+
+const agentReputation = await publicClient.readContract({
+  address: marketAddress,
+  abi: marketArtifact.abi,
+  functionName: "agentReputation",
+  args: [account.address],
+});
+
 const endingBalance = await publicClient.readContract({
   address: usdcAddress,
   abi: erc20Abi,
@@ -179,12 +201,16 @@ const result = {
   paidReceiptId: paidReceiptId.toString(),
   price: formatUnits(price, 6),
   bond: formatUnits(bond, 6),
+  agentBond: formatUnits(agentBond, 6),
+  finalAgentBond: formatUnits(finalAgentBond, 6),
+  agentReputation: agentReputation.toString(),
   remainingBond: formatUnits(source[5], 6),
   reputation: source[6].toString(),
   startingBalance: formatUnits(startingBalance, 6),
   endingBalance: formatUnits(endingBalance, 6),
   txs: {
     approve: approveTx,
+    agentBond: agentBondTx,
     register: registerTx,
     pay: payTx,
     refuse: refuseTx,
