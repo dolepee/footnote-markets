@@ -13,6 +13,7 @@
     "source:seed": "node scripts/register-seed-sources.mjs",
     "agent:cycle": "node scripts/run-buyer-agent-cycle.mjs",
     "spike:live": "node scripts/run-live-spike.mjs",
+    "web:sync": "node scripts/sync-web-data.mjs",
     "web:dev": "cd web && python3 -m http.server 4173"
   },
   "dependencies": {

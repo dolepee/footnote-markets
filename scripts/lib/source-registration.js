@@ -106,7 +106,9 @@ export async function registerCandidateSource(candidate, options = {}) {
 
   const latestRegistry = readJson(registryPath, []);
   const filtered = latestRegistry.filter((item) => !(item.market === marketAddress && item.sourceId === record.sourceId));
-  writeJson(registryPath, [...filtered, record]);
+  const updatedRegistry = [...filtered, record];
+  writeJson(registryPath, updatedRegistry);
+  writeJson(resolve(root, "web/data/registered-sources.json"), updatedRegistry);
   writeJson(resolve(root, `docs/live/sources/source-${record.sourceId}.json`), record);
 
   return { skipped: false, record };

@@ -1,0 +1,84 @@
+[
+  {
+    "chainId": 5042002,
+    "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+    "sourceId": "1",
+    "creator": "Footnote spike source",
+    "sourceType": "proof-seed",
+    "title": "Why nanopayments unlock creator markets",
+    "sourceUrl": "https://example.com/footnote/arc-nanopayments-source",
+    "payoutWallet": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+    "price": "0.003",
+    "bond": "0.047",
+    "summary": "Proof source from the Arc testnet spike. Use for operator-cycle testing until external creator sources are registered.",
+    "issue": null,
+    "issueUrl": "",
+    "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+    "registeredAt": "2026-06-16T17:17:10.972Z",
+    "txs": {
+      "register": "0xe688faa49d6a91a6d04813c24cca86ee97e33565a6df964a5605d8f8443a73a9"
+    }
+  },
+  {
+    "chainId": 5042002,
+    "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+    "sourceId": "2",
+    "creator": "Seed: Open-source publisher",
+    "sourceType": "seed",
+    "title": "RSS feeds as attribution rails for AI agents",
+    "sourceUrl": "https://github.com/DIYgod/RSSHub",
+    "payoutWallet": "0x7A3FFC0294f21E040b2bEa3e5Aad33cA08B33AcD",
+    "price": "0.006",
+    "bond": "0.02",
+    "summary": "RSS already carries canonical links and author identity. A payment layer can turn grounded AI answers into tiny creator payouts.",
+    "issue": null,
+    "issueUrl": "",
+    "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+    "registeredAt": "2026-06-16T17:40:37.984Z",
+    "txs": {
+      "approveBond": "0x879d043a3bed3d98b543a934bb3d40d0822551a1f4474df4b44a468a2ba9ef00",
+      "register": "0x462360744a145216b7c816dc3fe2bdd3eed01a748ab50e497c8f6f16223fa1fe"
+    }
+  },
+  {
+    "chainId": 5042002,
+    "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+    "sourceId": "3",
+    "creator": "Seed: Creator economy analyst",
+    "sourceType": "seed",
+    "title": "Why subscriptions are a payment-floor workaround",
+    "sourceUrl": "https://thecanteenapp.com",
+    "payoutWallet": "0xBDb1e0718EC6f6e2817c9cd4e5c5ed25Ac191Fb8",
+    "price": "0.018",
+    "bond": "0",
+    "summary": "Subscriptions bundle tiny consumption events into a larger bill because legacy rails cannot settle the native event economically.",
+    "issue": null,
+    "issueUrl": "",
+    "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+    "registeredAt": "2026-06-16T17:40:46.947Z",
+    "txs": {
+      "register": "0x842e85f6ddf7732e3b36e1ef1f396650ab2d6bf6c1097b4bb6c1e9bfe0bcef8e"
+    }
+  },
+  {
+    "chainId": 5042002,
+    "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+    "sourceId": "4",
+    "creator": "Seed: Arc builder",
+    "sourceType": "seed",
+    "title": "USDC gas and sub-second settlement for agents",
+    "sourceUrl": "https://docs.arc.network",
+    "payoutWallet": "0xFF3BDb60E16538333C9A290BB80bE52b3b82D2f3",
+    "price": "0.004",
+    "bond": "0.04",
+    "summary": "Arc gives agents predictable USDC-denominated settlement for hundreds of small economic decisions.",
+    "issue": null,
+    "issueUrl": "",
+    "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+    "registeredAt": "2026-06-16T17:40:57.235Z",
+    "txs": {
+      "approveBond": "0x38bad5b5a50536439b660d5b70dfc9788eed65efe61619636485d61efbbedc06",
+      "register": "0x20341dfa7014e6256005088d92168a361c1227f9d636cfcd1af36bd3a44521a8"
+    }
+  }
+]

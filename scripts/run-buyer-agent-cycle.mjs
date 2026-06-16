@@ -229,5 +229,6 @@ mkdirSync(cyclesDir, { recursive: true });
 const stamp = new Date().toISOString().replace(/[:.]/g, "-");
 writeJson(resolve(cyclesDir, `${stamp}.json`), cycle);
 writeJson(resolve(root, "docs/live/latest-cycle.json"), cycle);
+writeJson(resolve(root, "web/data/latest-cycle.json"), cycle);
 
 console.log(JSON.stringify(cycle, null, 2));

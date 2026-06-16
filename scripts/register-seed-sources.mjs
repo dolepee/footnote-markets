@@ -92,4 +92,5 @@ for (const seed of seeds) {
 }
 
 writeJson(registryPath, registry);
+writeJson(resolve(root, "web/data/registered-sources.json"), registry);
 console.log(JSON.stringify({ registered: records.length, records }, null, 2));

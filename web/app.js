@@ -151,6 +151,23 @@ function issueToSource(issue) {
   };
 }
 
+function registryToSource(record) {
+  return {
+    id: `chain-${record.sourceId}`,
+    creator: record.creator,
+    wallet: record.payoutWallet,
+    url: record.sourceUrl,
+    title: record.title,
+    excerpt: record.summary || "Registered source available to the buyer agent.",
+    price: Number(record.price || 0.004),
+    bond: Number(record.bond || 0),
+    reputation: Number(record.reputation ?? (record.bond && Number(record.bond) > 0 ? 58 : 50)),
+    tags: [record.sourceType || "registered", "arc-source"],
+    sourceType: record.sourceType || "registered",
+    issueUrl: record.issueUrl,
+  };
+}
+
 function runBuyerAgent(query, budget) {
   const tokens = query
     .toLowerCase()
@@ -325,6 +342,24 @@ async function loadLatestCycle() {
   }
 }
 
+async function loadRegisteredSources() {
+  try {
+    const response = await fetch("./data/registered-sources.json");
+    if (!response.ok) return;
+    const registry = await response.json();
+    if (!Array.isArray(registry) || registry.length === 0) return;
+    const registrySources = registry.map(registryToSource);
+    const transientSources = sources.filter(
+      (source) => source.sourceType === "external" || source.sourceType === "local-preview",
+    );
+    sources = [...transientSources, ...registrySources];
+    renderSources();
+    renderAgent();
+  } catch {
+    // Fallback seed sources remain available when static data is absent.
+  }
+}
+
 document.querySelector("#ask-form").addEventListener("submit", (event) => {
   event.preventDefault();
   renderAgent();
@@ -393,5 +428,6 @@ document.querySelector("#submit-source-link").setAttribute("href", intakeUrl);
 renderSources();
 renderReceipts();
 renderAgent();
+loadRegisteredSources();
 loadPublicIntakeSources();
 loadLatestCycle();
