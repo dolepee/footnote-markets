@@ -31,6 +31,9 @@ jobs:
       - name: Check JavaScript syntax
         run: find scripts web -type f \( -name "*.js" -o -name "*.mjs" \) -print0 | xargs -0 -n1 node --check
 
+      - name: Audit live records
+        run: npm run live:audit
+
       - name: Build static web
         run: npm --prefix web run build
 
