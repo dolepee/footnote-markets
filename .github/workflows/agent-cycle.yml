@@ -30,13 +30,25 @@ jobs:
 
       - run: npm ci
 
+      - name: Check Arc secrets
+        id: arc-secrets
+        run: |
+          if [ -z "$ARC_RPC_URL" ] || [ -z "$PRIVATE_KEY" ] || [ -z "$FOOTNOTE_MARKET" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Arc secrets are not configured; skipping live buyer cycle."
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Run external-source buyer cycle
+        if: steps.arc-secrets.outputs.ready == 'true'
         run: >
           npm run agent:cycle -- --require-external --query
           "What should an AI agent cite about nanopayments and creator monetization?"
           --budget 0.05
 
       - name: Commit cycle receipt
+        if: steps.arc-secrets.outputs.ready == 'true'
         run: |
           if [ -n "$(git status --porcelain docs/live web/data)" ]; then
             git config user.name "footnote-agent"
