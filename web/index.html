@@ -247,7 +247,14 @@
           <h2>Receipts that creators and agents can understand.</h2>
           <span class="eyebrow">Live Arc spike</span>
         </div>
-        <div class="receipt-grid" id="receipt-list"></div>
+        <div class="receipt-layout">
+          <div class="receipt-grid" id="receipt-list"></div>
+          <aside class="receipt-detail panel" id="receipt-detail" aria-live="polite">
+            <span class="label">Decision detail</span>
+            <h3>Select a receipt.</h3>
+            <p>Open any Arc receipt to inspect the payment, refusal, challenge, or source registration context.</p>
+          </aside>
+        </div>
       </section>
 
       <section class="section" id="docs">

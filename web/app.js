@@ -85,6 +85,8 @@ const live = {
 };
 
 let latestCycle = null;
+let currentReceipts = [];
+let selectedReceiptIndex = 0;
 
 const usd = (value) => `$${Number(value).toFixed(value < 0.01 ? 4 : 2)}`;
 const arcscan = (tx) => `https://testnet.arcscan.app/tx/${tx}`;
@@ -118,6 +120,98 @@ const receiptBadge = (label) => {
   if (label.includes("challenge") || label.includes("slash")) return "challenge";
   return "refuse";
 };
+
+const shortHash = (value) => (value ? `${value.slice(0, 10)}...${value.slice(-6)}` : "pending");
+
+function decisionForReceipt(receipt) {
+  const sourceId = receipt.label?.match(/source_(\d+)/)?.[1];
+  if (!sourceId || !Array.isArray(latestCycle?.decisions)) return null;
+  return latestCycle.decisions.find((decision) => String(decision.sourceId) === sourceId) || null;
+}
+
+function fallbackReason(decision) {
+  if (!decision) return "";
+  if (decision.decision === "PAY") return "The agent paid this source because it cleared relevance, trust, and budget.";
+  if (decision.decision === "REFUSE") {
+    return "The agent refused this source because price, trust, or budget did not justify payment.";
+  }
+  if (decision.decision === "SKIP") return "The agent skipped this source because it did not clear the review band.";
+  return "The agent recorded this decision as part of the market allocation run.";
+}
+
+function renderDetailRows(rows) {
+  return rows
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .map(
+      ([label, value]) => `
+      <div class="detail-row">
+        <span>${escapeHtml(label)}</span>
+        <strong>${escapeHtml(value)}</strong>
+      </div>
+    `,
+    )
+    .join("");
+}
+
+function receiptDetailHtml(receipt) {
+  const decision = decisionForReceipt(receipt);
+  const reason = decision?.reason || fallbackReason(decision);
+  const reasonHash = decision?.reasonHash || "will appear on the next structured live cycle";
+  const onchain = decision?.onchain || {};
+  const detailRows = decision
+    ? [
+        ["Decision", decision.decision],
+        ["Source", `#${decision.sourceId} · ${decision.title}`],
+        ["Creator", decision.creator],
+        ["Score", decision.score],
+        ["Price", usd(Number(decision.price || onchain.price || 0))],
+        ["Bond", usd(Number(onchain.bond || 0))],
+        ["Reputation", onchain.reputation],
+        ["Reason hash", reasonHash],
+      ]
+    : [
+        ["Receipt type", receipt.badge],
+        ["Arc chain", String(live.chainId)],
+        ["Market", latestCycle?.market || "0x2a2c...e5e"],
+      ];
+
+  const cycleMeta = latestCycle
+    ? `
+      <div class="detail-grid">
+        ${renderDetailRows([
+          ["Cycle budget", usd(Number(latestCycle.budget || 0))],
+          ["Cycle spent", usd(Number(latestCycle.spent || 0))],
+          ["Completed", latestCycle.completedAt ? new Date(latestCycle.completedAt).toLocaleString() : ""],
+        ])}
+      </div>
+    `
+    : "";
+
+  return `
+    <span class="badge ${receipt.badge}">${escapeHtml(receipt.badge)}</span>
+    <h3>${escapeHtml(receipt.title)}</h3>
+    <p>${escapeHtml(receipt.body)}</p>
+    ${reason ? `<div class="reason-box"><span class="label">Agent reason</span><p>${escapeHtml(reason)}</p></div>` : ""}
+    <div class="detail-grid">${renderDetailRows(detailRows)}</div>
+    ${cycleMeta}
+    <div class="receipt-actions">
+      <a class="btn primary" href="${arcscan(receipt.tx)}" target="_blank" rel="noreferrer">Open Arc receipt</a>
+      <a class="btn" href="${xIntent(`Footnote Markets receipt: ${receipt.title}. ${receipt.body}.`, arcscan(receipt.tx))}" target="_blank" rel="noreferrer">Share</a>
+    </div>
+    <p class="helper-text">Product receipt first: the market shows what the buyer agent paid, refused, or challenged. Arc proof supports the receipt without turning the app into a proof dashboard.</p>
+  `;
+}
+
+function selectReceipt(index) {
+  selectedReceiptIndex = Number(index) || 0;
+  const receipt = currentReceipts[selectedReceiptIndex];
+  const detail = document.querySelector("#receipt-detail");
+  if (!receipt || !detail) return;
+  detail.innerHTML = receiptDetailHtml(receipt);
+  document.querySelectorAll("[data-receipt-index]").forEach((card) => {
+    card.classList.toggle("active", Number(card.dataset.receiptIndex) === selectedReceiptIndex);
+  });
+}
 
 function parseIssueField(body, label) {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -234,14 +328,33 @@ function renderSources() {
 
 function renderReceipts() {
   const receipts = [
-    { title: "Source bond registered", tx: live.txs.register, body: "0.05 USDC bond locked", badge: "pay" },
-    { title: "Citation paid", tx: live.txs.pay, body: `${usd(live.price)} sent to creator`, badge: "pay" },
-    { title: "Competitor refused", tx: live.txs.refuse, body: "Overpriced for lower relevance", badge: "refuse" },
+    {
+      title: "Source bond registered",
+      tx: live.txs.register,
+      body: "0.05 USDC bond locked",
+      badge: "pay",
+      label: "register_source_bond",
+    },
+    {
+      title: "Citation paid",
+      tx: live.txs.pay,
+      body: `${usd(live.price)} sent to creator`,
+      badge: "pay",
+      label: "pay_source",
+    },
+    {
+      title: "Competitor refused",
+      tx: live.txs.refuse,
+      body: "Overpriced for lower relevance",
+      badge: "refuse",
+      label: "refuse_source",
+    },
     {
       title: "Objective challenge",
       tx: live.txs.challenge,
       body: `${usd(live.bond - live.remainingBond)} refunded from bond`,
       badge: "challenge",
+      label: "objective_challenge",
     },
   ];
 
@@ -255,26 +368,34 @@ function renderReceipts() {
         tx,
         body: cycleBody,
         badge: receiptBadge(label),
+        label,
       });
     });
   }
 
+  currentReceipts = receipts;
+  if (selectedReceiptIndex >= currentReceipts.length) selectedReceiptIndex = 0;
+
   document.querySelector("#receipt-list").innerHTML = receipts
-    .map(({ title, tx, body, badge }) => {
+    .map(({ title, tx, body, badge }, index) => {
       return `
-        <article class="receipt-card">
+        <button class="receipt-card ${index === selectedReceiptIndex ? "active" : ""}" type="button" data-receipt-index="${index}">
           <span class="badge ${badge}">${badge}</span>
           <h3>${escapeHtml(title)}</h3>
           <p>${escapeHtml(body)}</p>
           <div class="receipt-meta">
-            <a class="chip mono" href="${arcscan(tx)}" target="_blank" rel="noreferrer">${tx.slice(0, 12)}...</a>
-            <a class="chip" href="${xIntent(`Footnote Markets receipt: ${title}. ${body}.`, arcscan(tx))}" target="_blank" rel="noreferrer">share</a>
+            <span class="chip mono">${shortHash(tx)}</span>
             <span class="chip">Arc chain ${live.chainId}</span>
           </div>
-        </article>
+        </button>
       `;
     })
     .join("");
+
+  document.querySelectorAll("[data-receipt-index]").forEach((card) => {
+    card.addEventListener("click", () => selectReceipt(card.dataset.receiptIndex));
+  });
+  selectReceipt(selectedReceiptIndex);
 }
 
 function renderAgent() {
