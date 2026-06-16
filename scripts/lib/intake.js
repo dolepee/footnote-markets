@@ -12,6 +12,7 @@ export function issueToCandidate(issue) {
   return {
     issue: issue.number,
     issueUrl: issue.html_url,
+    labels: (issue.labels || []).map((label) => label.name),
     sourceType: "external",
     creator: parseIssueField(body, "Creator name") || issue.user?.login || "Creator",
     sourceUrl: parseIssueField(body, "Source URL"),
