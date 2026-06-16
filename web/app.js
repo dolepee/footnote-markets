@@ -110,6 +110,7 @@ const safeUrl = (value) => {
 
 const sourceTypeLabel = (source) => {
   if (source.sourceType === "external") return "external";
+  if (source.sourceType === "intake-preview") return "intake preview";
   if (source.sourceType === "local-preview") return "preview";
   return "seed";
 };
@@ -240,7 +241,7 @@ function issueToSource(issue) {
     bond: Number.isFinite(bond) ? bond : 0,
     reputation: bond > 0 ? 58 : 50,
     tags: ["public intake", "creator-source"],
-    sourceType: "external",
+    sourceType: "intake-preview",
     issueUrl: issue.html_url,
   };
 }
@@ -298,7 +299,9 @@ function runBuyerAgent(query, budget) {
 
 function renderSources() {
   const externalCount = sources.filter((source) => source.sourceType === "external").length;
-  const previewCount = sources.filter((source) => source.sourceType === "local-preview").length;
+  const previewCount = sources.filter(
+    (source) => source.sourceType === "local-preview" || source.sourceType === "intake-preview",
+  ).length;
   const seedCount = sources.length - externalCount - previewCount;
   document.querySelector("#external-count").textContent = externalCount;
   document.querySelector("#seed-count").textContent = seedCount;
@@ -444,7 +447,9 @@ async function loadPublicIntakeSources() {
     if (issueSources.length === 0) return;
     const existing = new Set(sources.map((source) => source.id));
     sources = [...issueSources.filter((source) => !existing.has(source.id)), ...sources];
-    status.textContent = `${issueSources.length} public creator source${issueSources.length === 1 ? "" : "s"} loaded from GitHub intake.`;
+    status.textContent = `${issueSources.length} public creator source${
+      issueSources.length === 1 ? "" : "s"
+    } loaded from GitHub intake as preview supply. Approval and Arc registration are still required.`;
     renderSources();
     renderAgent();
   } catch {
@@ -471,7 +476,10 @@ async function loadRegisteredSources() {
     if (!Array.isArray(registry) || registry.length === 0) return;
     const registrySources = registry.map(registryToSource);
     const transientSources = sources.filter(
-      (source) => source.sourceType === "external" || source.sourceType === "local-preview",
+      (source) =>
+        source.sourceType === "external" ||
+        source.sourceType === "local-preview" ||
+        source.sourceType === "intake-preview",
     );
     sources = [...transientSources, ...registrySources];
     renderSources();
