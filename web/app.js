@@ -186,6 +186,13 @@ function runBuyerAgent(query, budget) {
 }
 
 function renderSources() {
+  const externalCount = sources.filter((source) => source.sourceType === "external").length;
+  const previewCount = sources.filter((source) => source.sourceType === "local-preview").length;
+  const seedCount = sources.length - externalCount - previewCount;
+  document.querySelector("#external-count").textContent = externalCount;
+  document.querySelector("#seed-count").textContent = seedCount;
+  document.querySelector("#preview-count").textContent = previewCount;
+
   const target = document.querySelector("#source-list");
   target.innerHTML = sources
     .map(

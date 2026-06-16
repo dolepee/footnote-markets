@@ -185,33 +185,60 @@
           <span class="eyebrow">Creator supply</span>
         </div>
         <div class="two-col">
-          <form class="panel form-grid" id="source-form">
-            <span class="label">Register source locally</span>
-            <h3>Make your writing citeable.</h3>
-            <label class="field"><span class="label">Creator</span><input id="creator" placeholder="e.g. qdee" /></label>
-            <label class="field"><span class="label">Source title</span><input id="title" placeholder="Your post or article" /></label>
-            <label class="field"><span class="label">Source URL</span><input id="source-url" placeholder="https://..." /></label>
-            <label class="field"><span class="label">Payout wallet</span><input id="wallet" placeholder="0x..." /></label>
-            <label class="field"><span class="label">Price per citation</span><input id="price" value="0.004" inputmode="decimal" /></label>
-            <label class="field"><span class="label">Optional bond</span><input id="bond" value="0.01" inputmode="decimal" /></label>
-            <button class="btn primary" type="submit">Preview source</button>
-            <div class="action-row compact">
-              <button class="btn" id="copy-source-packet" type="button">Copy intake packet</button>
-              <a
-                class="btn"
-                id="submit-source-link"
-                href="https://github.com/dolepee/footnote-markets/issues/new?template=source.yml"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Submit on GitHub
-              </a>
+          <div class="creator-stack">
+            <aside class="panel creator-callout">
+              <span class="label">For creators</span>
+              <h3>Turn one useful source into an agent-payable asset.</h3>
+              <p>
+                Submit an article, post, research note, dataset, or media page. The buyer agent can cite it, pay your
+                wallet in USDC, or refuse it with a reason when the price or trust signal does not clear.
+              </p>
+              <div class="mini-stats" aria-label="Source mix">
+                <div><span id="external-count">0</span><small>external</small></div>
+                <div><span id="seed-count">0</span><small>seed</small></div>
+                <div><span id="preview-count">0</span><small>preview</small></div>
+              </div>
+              <ol class="steps">
+                <li><strong>Submit source.</strong> Add URL, payout wallet, price, and optional bond.</li>
+                <li><strong>Compete for budget.</strong> Agent scores relevance, price, bond, and reputation.</li>
+                <li><strong>Earn receipts.</strong> PAY sends USDC; REFUSE still leaves a decision trail.</li>
+              </ol>
+            </aside>
+
+            <form class="panel form-grid" id="source-form">
+              <span class="label">Register source locally</span>
+              <h3>Make your writing citeable.</h3>
+              <label class="field"><span class="label">Creator</span><input id="creator" placeholder="e.g. qdee" /></label>
+              <label class="field"><span class="label">Source title</span><input id="title" placeholder="Your post or article" /></label>
+              <label class="field"><span class="label">Source URL</span><input id="source-url" placeholder="https://..." /></label>
+              <label class="field"><span class="label">Payout wallet</span><input id="wallet" placeholder="0x..." /></label>
+              <label class="field"><span class="label">Price per citation</span><input id="price" value="0.004" inputmode="decimal" /></label>
+              <label class="field"><span class="label">Optional bond</span><input id="bond" value="0.01" inputmode="decimal" /></label>
+              <button class="btn primary" type="submit">Preview source</button>
+              <div class="action-row compact">
+                <button class="btn" id="copy-source-packet" type="button">Copy intake packet</button>
+                <a
+                  class="btn"
+                  id="submit-source-link"
+                  href="https://github.com/dolepee/footnote-markets/issues/new?template=source.yml"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Submit on GitHub
+                </a>
+              </div>
+              <p class="helper-text" id="source-status">
+                Public intake creates real creator supply; seed sources are labeled separately until external creators land.
+              </p>
+            </form>
+          </div>
+          <div>
+            <div class="source-list-head">
+              <span class="label">Sources competing now</span>
+              <span class="chip">seed is demo only</span>
             </div>
-            <p class="helper-text" id="source-status">
-              Public intake creates real creator supply; seed sources are labeled separately until external creators land.
-            </p>
-          </form>
-          <div class="source-grid single" id="source-list"></div>
+            <div class="source-grid single" id="source-list"></div>
+          </div>
         </div>
       </section>
 
