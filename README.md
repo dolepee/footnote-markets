@@ -4,6 +4,8 @@ AI agents pay creators when they cite their work.
 
 Footnote Markets is a bonded citation market for Lepton Agents: creators register priced sources, an AI buyer agent allocates a USDC budget across competing sources, pays the ones worth citing, refuses weak or overpriced sources, and leaves a receipt for every payment or refusal.
 
+Live product shell: https://footnote-markets.vercel.app
+
 ## Current Spike
 
 This repository is in the first validation spike:

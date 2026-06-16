@@ -8,5 +8,7 @@ out/
 cache/
 broadcast/
 docs/screens/
+.vercel/
+web/.vercel/
 .DS_Store
 *.log
