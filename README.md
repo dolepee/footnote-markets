@@ -1,14 +1,29 @@
 # Footnote Markets
 
+![CI](https://github.com/dolepee/footnote-markets/actions/workflows/ci.yml/badge.svg)
+
 AI agents pay creators when they cite their work.
 
 Footnote Markets is a bonded citation market for Lepton Agents: creators register priced sources, an AI buyer agent allocates a USDC budget across competing sources, pays the ones worth citing, refuses weak or overpriced sources, and leaves a receipt for every payment or refusal.
 
-Live product shell: https://footnote-markets.vercel.app
+Live product: https://footnote-markets.vercel.app
 
-## Current Spike
+## Judge Path
 
-This repository is in the first validation spike:
+1. Open the live product and run the buyer agent.
+2. Watch the agent allocate a small USDC budget across competing sources: PAY, SKIP, or REFUSE.
+3. Open receipts to verify the Arc market, citation payment, refusal, and objective slash/refund trail.
+
+## Lepton Fit
+
+- **Agentic sophistication:** the buyer agent decides which creator sources deserve payment under a budget, using relevance, price, bond, and reputation.
+- **Traction path:** creator intake issues become approved Arc-registered sources, then scheduled buyer-agent cycles can pay them automatically.
+- **Circle/Arc usage:** USDC is the settlement asset, Arc is the market chain, and sub-cent citation payments are the product action.
+- **Innovation:** creators can optionally bond their source quality; objective failures slash stake, while subjective disagreement only affects reputation.
+
+## What Is Live
+
+The current Arc testnet build supports:
 
 1. Register a creator source with an optional credibility bond.
 2. Require an authorized, bonded buyer agent before it can record PAY or REFUSE decisions.
@@ -41,6 +56,12 @@ The autonomous buyer-agent cycle also passed on Arc testnet with multiple compet
 - Pay txs: `0x77e5394afab7b777243e7e48d1dbdf5ae72c3e7d13cf904c7b4c586258caf782`, `0xe813b07e714d40c8ecbfda069bbd025cb40a6b1f9f85b4d42173acf40b714494`.
 
 Latest cycle record: `docs/live/latest-cycle.json`.
+
+## What We Do Not Claim
+
+- Seed sources are demo supply, not external creator traction.
+- V1 auto-slashing is limited to objective hash-change failure.
+- Subjective source quality is not treated as slashable truth; it can only affect reputation and future decisions.
 
 ## Structure
 

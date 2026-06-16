@@ -1,7 +1,7 @@
 name: Creator source intake
 description: Register a source that a Footnote buyer agent can cite and pay for.
 title: "Creator source: "
-labels: ["creator-source"]
+labels: ["creator-source", "needs-source-review"]
 body:
   - type: markdown
     attributes:
