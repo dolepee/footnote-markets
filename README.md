@@ -88,6 +88,7 @@ Then open `http://localhost:4173`.
 
 ```bash
 npm run intake:fetch
+npm run intake:review
 npm run source:seed
 npm run source:register -- --creator Test --url https://example.com --wallet 0x0000000000000000000000000000000000000001 --price 0.001 --title Test --dry-run
 npm run source:register -- --issue <github-issue-number>
@@ -98,6 +99,6 @@ npm run web:sync
 npm run live:audit
 ```
 
-`source:seed` registers clearly labeled seed sources for demo competition; it is not counted as external traction. `source:register -- --dry-run` validates a manual source without chain credentials. `source:approved -- --dry-run` previews approved GitHub intake issues, and `source:approved` registers only open `creator-source` issues that also carry the `approved-source` label. Batch approval defaults to `--max-bond 0` because the current operator-run flow funds source bonds from the registering wallet; pass `--max-bond <amount>` only when that bond funding is intentional. `web:sync` mirrors live source and cycle records into `web/data` so the public app can load the latest registry. `live:audit` checks web/data sync, source references, tx hashes, spend-vs-budget, and the objective challenge spike. `source:register`, `source:approved`, and live `agent:cycle` require `ARC_RPC_URL`, `PRIVATE_KEY`, and the deployed market address via `FOOTNOTE_MARKET` or `docs/live/arc-testnet.json`. Use `agent:cycle -- --dry-run` to test decisions without sending transactions.
+`source:seed` registers clearly labeled seed sources for demo competition; it is not counted as external traction. `intake:review` validates open creator-source issues and prints the exact next action for each issue before anything touches Arc. `source:register -- --dry-run` validates a manual source without chain credentials. `source:approved -- --dry-run` previews approved GitHub intake issues, and `source:approved` registers only open `creator-source` issues that also carry the `approved-source` label. Batch approval defaults to `--max-bond 0` because the current operator-run flow funds source bonds from the registering wallet; pass `--max-bond <amount>` only when that bond funding is intentional. `web:sync` mirrors live source and cycle records into `web/data` so the public app can load the latest registry. `live:audit` checks web/data sync, source references, tx hashes, spend-vs-budget, and the objective challenge spike. `source:register`, `source:approved`, and live `agent:cycle` require `ARC_RPC_URL`, `PRIVATE_KEY`, and the deployed market address via `FOOTNOTE_MARKET` or `docs/live/arc-testnet.json`. Use `agent:cycle -- --dry-run` to test decisions without sending transactions.
 
 The GitHub Actions cycle is scheduled every 6 hours but runs with `--require-external`, so it skips until at least one external creator-source issue has been registered on Arc. Required repository secrets: `ARC_RPC_URL`, `ARC_USDC`, `PRIVATE_KEY`, `FOOTNOTE_MARKET`.

@@ -8,6 +8,7 @@
     "contracts:build": "cd contracts && forge build",
     "deploy:market": "node scripts/deploy-footnote-market.mjs",
     "intake:fetch": "node scripts/fetch-creator-intake.mjs",
+    "intake:review": "node scripts/review-creator-intake.mjs",
     "source:register": "node scripts/register-creator-source.mjs",
     "source:approved": "node scripts/register-approved-sources.mjs",
     "source:seed": "node scripts/register-seed-sources.mjs",
