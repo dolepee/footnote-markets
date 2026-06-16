@@ -1,0 +1,36 @@
+name: Creator source validation
+
+on:
+  issues:
+    types: [opened, edited, reopened, labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  validate:
+    if: contains(github.event.issue.labels.*.name, 'creator-source')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Validate creator source issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >
+          npm run intake:validate-issue -- --issue "${{ github.event.issue.number }}"
+          --repo "${{ github.repository }}"
+          --out /tmp/footnote-source-validation.md
+
+      - name: Comment validation result
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/footnote-source-validation.md
