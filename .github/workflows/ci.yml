@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
 
       - name: Install Foundry dependencies
-        run: git clone --depth 1 https://github.com/foundry-rs/forge-std contracts/lib/forge-std
+        run: rm -rf contracts/lib/forge-std && git clone --depth 1 https://github.com/foundry-rs/forge-std contracts/lib/forge-std
 
       - name: Check JavaScript syntax
         run: find scripts web -type f \( -name "*.js" -o -name "*.mjs" \) -print0 | xargs -0 -n1 node --check
