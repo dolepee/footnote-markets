@@ -1,0 +1,32 @@
+[
+  {
+    "creator": "Seed: Open-source publisher",
+    "sourceType": "seed",
+    "title": "RSS feeds as attribution rails for AI agents",
+    "sourceUrl": "https://github.com/DIYgod/RSSHub",
+    "payoutWallet": "0x7A3FFC0294f21E040b2bEa3e5Aad33cA08B33AcD",
+    "price": "0.006",
+    "bond": "0.02",
+    "summary": "RSS already carries canonical links and author identity. A payment layer can turn grounded AI answers into tiny creator payouts."
+  },
+  {
+    "creator": "Seed: Creator economy analyst",
+    "sourceType": "seed",
+    "title": "Why subscriptions are a payment-floor workaround",
+    "sourceUrl": "https://thecanteenapp.com",
+    "payoutWallet": "0xBDb1e0718EC6f6e2817c9cd4e5c5ed25Ac191Fb8",
+    "price": "0.018",
+    "bond": "0",
+    "summary": "Subscriptions bundle tiny consumption events into a larger bill because legacy rails cannot settle the native event economically."
+  },
+  {
+    "creator": "Seed: Arc builder",
+    "sourceType": "seed",
+    "title": "USDC gas and sub-second settlement for agents",
+    "sourceUrl": "https://docs.arc.network",
+    "payoutWallet": "0xFF3BDb60E16538333C9A290BB80bE52b3b82D2f3",
+    "price": "0.004",
+    "bond": "0.04",
+    "summary": "Arc gives agents predictable USDC-denominated settlement for hundreds of small economic decisions."
+  }
+]

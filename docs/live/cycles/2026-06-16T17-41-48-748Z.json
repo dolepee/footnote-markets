@@ -2,9 +2,9 @@
   "chainId": 5042002,
   "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
   "actor": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
-  "query": "Why do nanopayments unlock creator markets, and why do RSS feeds matter for AI agents?",
-  "budget": "0.009",
-  "spent": "0.009",
+  "query": "Why do nanopayments and Arc USDC matter for creator monetization and AI citations?",
+  "budget": "0.012",
+  "spent": "0",
   "dryRun": false,
   "startingAgentBond": "0.097",
   "finalAgentBond": "0.097",
@@ -13,13 +13,13 @@
       "sourceId": "1",
       "creator": "Footnote spike source",
       "title": "Why nanopayments unlock creator markets",
-      "decision": "PAY",
-      "score": 61,
+      "decision": "REFUSE",
+      "score": 27,
       "price": "0.003",
       "onchain": {
         "price": "0.003",
         "bond": "0.047",
-        "reputation": "-10",
+        "reputation": "-9",
         "active": true
       }
     },
@@ -27,13 +27,13 @@
       "sourceId": "2",
       "creator": "Seed: Open-source publisher",
       "title": "RSS feeds as attribution rails for AI agents",
-      "decision": "PAY",
-      "score": 52,
+      "decision": "REFUSE",
+      "score": 18,
       "price": "0.006",
       "onchain": {
         "price": "0.006",
         "bond": "0.02",
-        "reputation": "-1",
+        "reputation": "0",
         "active": true
       }
     },
@@ -56,37 +56,33 @@
       "creator": "Seed: Arc builder",
       "title": "USDC gas and sub-second settlement for agents",
       "decision": "REFUSE",
-      "score": 22,
+      "score": 24,
       "price": "0.004",
       "onchain": {
         "price": "0.004",
         "bond": "0.04",
-        "reputation": "-1",
+        "reputation": "0",
         "active": true
       }
     }
   ],
   "txs": [
     {
-      "label": "approve_cycle_spend_and_bond",
-      "tx": "0x8cc99f0ee72e281d2113bad74201f47fa8d732063ad831afc12e85e3e820e541"
+      "label": "refuse_source_1",
+      "tx": "0x09e7a00c4fd109db9cbb0edab893d40d1ed675b5e4ddf8c617afddd4507c1cb4"
     },
     {
-      "label": "pay_source_1",
-      "tx": "0x77e5394afab7b777243e7e48d1dbdf5ae72c3e7d13cf904c7b4c586258caf782"
-    },
-    {
-      "label": "pay_source_2",
-      "tx": "0xe813b07e714d40c8ecbfda069bbd025cb40a6b1f9f85b4d42173acf40b714494"
+      "label": "refuse_source_2",
+      "tx": "0x02d5d416c4e1e71069f5a8550bdfdb08b8021b0669846f3ea939d774a08b1a64"
     },
     {
       "label": "skip_source_3",
-      "tx": "0x101cd907e5f6ede9c90af830f7aa36a78fe2cfec62b44782beee7a02bd117eb4"
+      "tx": "0x3bdc89c6865026574e7754942696c8866aae96e5dfbd7a6e116edf01abc4d1d2"
     },
     {
       "label": "refuse_source_4",
-      "tx": "0x3a5430688be60879e93b8ef174b0265364d61ead522b035df782b233306842db"
+      "tx": "0xe7048c0d1d66df650decc502f5b9bf7d79ca381a2732ba1069c449570a2b3c1e"
     }
   ],
-  "completedAt": "2026-06-16T17:42:58.863Z"
+  "completedAt": "2026-06-16T17:41:48.747Z"
 }

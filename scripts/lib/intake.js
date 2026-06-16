@@ -12,6 +12,7 @@ export function issueToCandidate(issue) {
   return {
     issue: issue.number,
     issueUrl: issue.html_url,
+    sourceType: "external",
     creator: parseIssueField(body, "Creator name") || issue.user?.login || "Creator",
     sourceUrl: parseIssueField(body, "Source URL"),
     payoutWallet: parseIssueField(body, "Arc-compatible payout wallet"),

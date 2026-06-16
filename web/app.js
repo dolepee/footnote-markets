@@ -14,6 +14,7 @@ const seedSources = [
     price: 0.003,
     bond: 0.05,
     reputation: 92,
+    sourceType: "seed",
     tags: ["nanopayments", "creators", "Arc"],
   },
   {
@@ -27,6 +28,7 @@ const seedSources = [
     price: 0.006,
     bond: 0.02,
     reputation: 74,
+    sourceType: "seed",
     tags: ["RSS", "x402", "AI"],
   },
   {
@@ -40,6 +42,7 @@ const seedSources = [
     price: 0.018,
     bond: 0,
     reputation: 41,
+    sourceType: "seed",
     tags: ["subscriptions", "pricing"],
   },
   {
@@ -53,6 +56,7 @@ const seedSources = [
     price: 0.004,
     bond: 0.04,
     reputation: 85,
+    sourceType: "seed",
     tags: ["USDC", "agents", "settlement"],
   },
 ];
@@ -102,6 +106,19 @@ const safeUrl = (value) => {
   }
 };
 
+const sourceTypeLabel = (source) => {
+  if (source.sourceType === "external") return "external";
+  if (source.sourceType === "local-preview") return "preview";
+  return "seed";
+};
+
+const receiptBadge = (label) => {
+  if (label.includes("pay") || label.includes("approve")) return "pay";
+  if (label.includes("skip")) return "skip";
+  if (label.includes("challenge") || label.includes("slash")) return "challenge";
+  return "refuse";
+};
+
 function parseIssueField(body, label) {
   const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const match = body.match(new RegExp(`### ${escaped}\\s+([\\s\\S]*?)(?=\\n### |$)`, "i"));
@@ -129,6 +146,7 @@ function issueToSource(issue) {
     bond: Number.isFinite(bond) ? bond : 0,
     reputation: bond > 0 ? 58 : 50,
     tags: ["public intake", "creator-source"],
+    sourceType: "external",
     issueUrl: issue.html_url,
   };
 }
@@ -178,6 +196,7 @@ function renderSources() {
         <p>${escapeHtml(source.excerpt)}</p>
         <div class="source-meta">
           <span class="chip">${usd(source.price)} / citation</span>
+          <span class="chip">${sourceTypeLabel(source)}</span>
           <span class="chip">${source.bond > 0 ? `${usd(source.bond)} bond` : "unbonded"}</span>
           <span class="chip">rep ${source.reputation}</span>
           ${safeUrl(source.url) ? `<a class="chip" href="${safeUrl(source.url)}" target="_blank" rel="noreferrer">source</a>` : ""}
@@ -211,7 +230,7 @@ function renderReceipts() {
         title: `Latest agent cycle: ${label.replaceAll("_", " ")}`,
         tx,
         body: cycleBody,
-        badge: label.includes("pay") ? "pay" : "refuse",
+        badge: receiptBadge(label),
       });
     });
   }
@@ -323,6 +342,7 @@ document.querySelector("#source-form").addEventListener("submit", (event) => {
     price: Number(document.querySelector("#price").value || 0.004),
     bond: Number(document.querySelector("#bond").value || 0),
     reputation: 50,
+    sourceType: "local-preview",
     tags: ["submitted", "pending"],
   };
   sources.unshift(source);

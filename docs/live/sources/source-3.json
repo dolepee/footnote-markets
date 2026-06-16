@@ -1,0 +1,20 @@
+{
+  "chainId": 5042002,
+  "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+  "sourceId": "3",
+  "creator": "Seed: Creator economy analyst",
+  "sourceType": "seed",
+  "title": "Why subscriptions are a payment-floor workaround",
+  "sourceUrl": "https://thecanteenapp.com",
+  "payoutWallet": "0xBDb1e0718EC6f6e2817c9cd4e5c5ed25Ac191Fb8",
+  "price": "0.018",
+  "bond": "0",
+  "summary": "Subscriptions bundle tiny consumption events into a larger bill because legacy rails cannot settle the native event economically.",
+  "issue": null,
+  "issueUrl": "",
+  "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+  "registeredAt": "2026-06-16T17:40:46.947Z",
+  "txs": {
+    "register": "0x842e85f6ddf7732e3b36e1ef1f396650ab2d6bf6c1097b4bb6c1e9bfe0bcef8e"
+  }
+}

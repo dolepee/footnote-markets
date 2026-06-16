@@ -3,6 +3,7 @@
   "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
   "sourceId": "1",
   "creator": "Footnote spike source",
+  "sourceType": "proof-seed",
   "title": "Why nanopayments unlock creator markets",
   "sourceUrl": "https://example.com/footnote/arc-nanopayments-source",
   "payoutWallet": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",

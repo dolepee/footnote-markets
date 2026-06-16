@@ -35,7 +35,7 @@ if (!marketAddress) throw new Error("FOOTNOTE_MARKET or docs/live/arc-testnet.js
 if (registry.length === 0) throw new Error("No registered sources. Run scripts/register-creator-source.mjs first.");
 
 const activeRegistry = requireExternal
-  ? registry.filter((source) => source.issue || source.issueUrl || !source.sourceUrl?.includes("example.com/footnote"))
+  ? registry.filter((source) => source.sourceType === "external" || source.issue || source.issueUrl)
   : registry;
 
 if (activeRegistry.length === 0) {

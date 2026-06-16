@@ -1,0 +1,21 @@
+{
+  "chainId": 5042002,
+  "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+  "sourceId": "2",
+  "creator": "Seed: Open-source publisher",
+  "sourceType": "seed",
+  "title": "RSS feeds as attribution rails for AI agents",
+  "sourceUrl": "https://github.com/DIYgod/RSSHub",
+  "payoutWallet": "0x7A3FFC0294f21E040b2bEa3e5Aad33cA08B33AcD",
+  "price": "0.006",
+  "bond": "0.02",
+  "summary": "RSS already carries canonical links and author identity. A payment layer can turn grounded AI answers into tiny creator payouts.",
+  "issue": null,
+  "issueUrl": "",
+  "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+  "registeredAt": "2026-06-16T17:40:37.984Z",
+  "txs": {
+    "approveBond": "0x879d043a3bed3d98b543a934bb3d40d0822551a1f4474df4b44a468a2ba9ef00",
+    "register": "0x462360744a145216b7c816dc3fe2bdd3eed01a748ab50e497c8f6f16223fa1fe"
+  }
+}

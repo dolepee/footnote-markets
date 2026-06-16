@@ -1,0 +1,21 @@
+{
+  "chainId": 5042002,
+  "market": "0x2a2cf1c9028cd4bc6afaa0b9d8401c40b4050e5e",
+  "sourceId": "4",
+  "creator": "Seed: Arc builder",
+  "sourceType": "seed",
+  "title": "USDC gas and sub-second settlement for agents",
+  "sourceUrl": "https://docs.arc.network",
+  "payoutWallet": "0xFF3BDb60E16538333C9A290BB80bE52b3b82D2f3",
+  "price": "0.004",
+  "bond": "0.04",
+  "summary": "Arc gives agents predictable USDC-denominated settlement for hundreds of small economic decisions.",
+  "issue": null,
+  "issueUrl": "",
+  "registeredBy": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+  "registeredAt": "2026-06-16T17:40:57.235Z",
+  "txs": {
+    "approveBond": "0x38bad5b5a50536439b660d5b70dfc9788eed65efe61619636485d61efbbedc06",
+    "register": "0x20341dfa7014e6256005088d92168a361c1227f9d636cfcd1af36bd3a44521a8"
+  }
+}

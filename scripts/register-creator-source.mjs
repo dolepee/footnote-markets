@@ -40,6 +40,7 @@ async function candidateFromArgs() {
   return {
     issue: null,
     issueUrl: "",
+    sourceType: args.get("source-type") || "manual",
     creator: required("creator"),
     sourceUrl: required("url"),
     payoutWallet: required("wallet"),
@@ -104,6 +105,7 @@ const record = {
   summary: candidate.summary,
   issue: candidate.issue,
   issueUrl: candidate.issueUrl,
+  sourceType: candidate.sourceType || (candidate.issue ? "external" : "manual"),
   registeredBy: account.address,
   registeredAt: new Date().toISOString(),
   txs,

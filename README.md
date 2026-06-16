@@ -32,13 +32,13 @@ The first live spike passed on Arc testnet:
 
 Full transaction record: `docs/live/spike-arc-testnet.json`.
 
-The first autonomous buyer-agent cycle also passed on Arc testnet:
+The autonomous buyer-agent cycle also passed on Arc testnet with multiple competing sources:
 
-- Query: `Why do nanopayments unlock creator markets for AI agents?`
-- Budget: `0.05` USDC.
-- Decision: PAY source `1`.
-- Spend: `0.003` USDC.
-- Pay tx: `0x1b16eef84f7c5add1a60dffc72f6c6bcc15a1df72b767af1ecb65da5eebc931e`.
+- Query: `Why do nanopayments unlock creator markets, and why do RSS feeds matter for AI agents?`
+- Budget: `0.009` USDC.
+- Decisions: PAY sources `1` and `2`, SKIP source `3`, REFUSE source `4`.
+- Spend: `0.009` USDC.
+- Pay txs: `0x77e5394afab7b777243e7e48d1dbdf5ae72c3e7d13cf904c7b4c586258caf782`, `0xe813b07e714d40c8ecbfda069bbd025cb40a6b1f9f85b4d42173acf40b714494`.
 
 Latest cycle record: `docs/live/latest-cycle.json`.
 
@@ -67,10 +67,11 @@ Then open `http://localhost:4173`.
 
 ```bash
 npm run intake:fetch
+npm run source:seed
 npm run source:register -- --issue <github-issue-number>
 npm run agent:cycle -- --query "Why do nanopayments matter for creator publishing?" --budget 0.05
 ```
 
-`source:register` and live `agent:cycle` require `ARC_RPC_URL`, `PRIVATE_KEY`, and the deployed market address via `FOOTNOTE_MARKET` or `docs/live/arc-testnet.json`. Use `agent:cycle -- --dry-run` to test decisions without sending transactions.
+`source:seed` registers clearly labeled seed sources for demo competition; it is not counted as external traction. `source:register` and live `agent:cycle` require `ARC_RPC_URL`, `PRIVATE_KEY`, and the deployed market address via `FOOTNOTE_MARKET` or `docs/live/arc-testnet.json`. Use `agent:cycle -- --dry-run` to test decisions without sending transactions.
 
 The GitHub Actions cycle is scheduled every 6 hours but runs with `--require-external`, so it skips until at least one external creator-source issue has been registered on Arc. Required repository secrets: `ARC_RPC_URL`, `ARC_USDC`, `PRIVATE_KEY`, `FOOTNOTE_MARKET`.
