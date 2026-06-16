@@ -168,10 +168,26 @@
             <h3>Make your writing citeable.</h3>
             <label class="field"><span class="label">Creator</span><input id="creator" placeholder="e.g. qdee" /></label>
             <label class="field"><span class="label">Source title</span><input id="title" placeholder="Your post or article" /></label>
+            <label class="field"><span class="label">Source URL</span><input id="source-url" placeholder="https://..." /></label>
+            <label class="field"><span class="label">Payout wallet</span><input id="wallet" placeholder="0x..." /></label>
             <label class="field"><span class="label">Price per citation</span><input id="price" value="0.004" inputmode="decimal" /></label>
             <label class="field"><span class="label">Optional bond</span><input id="bond" value="0.01" inputmode="decimal" /></label>
-            <button class="btn primary" type="submit">Add source</button>
-            <p>Next build step: persist this to a real database and contract registration flow.</p>
+            <button class="btn primary" type="submit">Preview source</button>
+            <div class="action-row compact">
+              <button class="btn" id="copy-source-packet" type="button">Copy intake packet</button>
+              <a
+                class="btn"
+                id="submit-source-link"
+                href="https://github.com/dolepee/footnote-markets/issues/new?template=source.yml"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Submit on GitHub
+              </a>
+            </div>
+            <p class="helper-text" id="source-status">
+              Public intake creates real creator supply; selected sources get bonded and paid on Arc.
+            </p>
           </form>
           <div class="source-grid single" id="source-list"></div>
         </div>

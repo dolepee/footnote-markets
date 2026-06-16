@@ -1,0 +1,64 @@
+name: Creator source intake
+description: Register a source that a Footnote buyer agent can cite and pay for.
+title: "Creator source: "
+labels: ["creator-source"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit a source you want AI agents to cite and pay for. V1 uses this intake to verify real creator supply before bonding selected sources on Arc.
+  - type: input
+    id: creator
+    attributes:
+      label: Creator name
+      description: The public creator, publication, or team name.
+      placeholder: "qdee"
+    validations:
+      required: true
+  - type: input
+    id: source_url
+    attributes:
+      label: Source URL
+      description: Public URL to the article, post, research note, dataset, or media page.
+      placeholder: "https://..."
+    validations:
+      required: true
+  - type: input
+    id: wallet
+    attributes:
+      label: Arc-compatible payout wallet
+      description: EVM address that can receive USDC on Arc testnet/mainnet when supported.
+      placeholder: "0x..."
+    validations:
+      required: true
+  - type: input
+    id: price
+    attributes:
+      label: Requested price per citation
+      description: Use a small USDC amount. Example: 0.003.
+      placeholder: "0.003"
+    validations:
+      required: true
+  - type: input
+    id: bond
+    attributes:
+      label: Optional credibility bond
+      description: Amount of USDC you are willing to bond against objective failures such as changed hash or unavailable source.
+      placeholder: "0.01"
+  - type: textarea
+    id: summary
+    attributes:
+      label: Why should agents cite it?
+      description: One or two sentences explaining what the source helps an agent answer.
+      placeholder: "This source explains..."
+    validations:
+      required: true
+  - type: checkboxes
+    id: assertions
+    attributes:
+      label: Assertions
+      options:
+        - label: I control this source or have the right to submit it.
+          required: true
+        - label: I understand V1 only slashes bonds for objective failures, not subjective disagreement.
+          required: true

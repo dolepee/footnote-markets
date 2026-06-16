@@ -1,8 +1,12 @@
-const sources = [
+const repoUrl = "https://github.com/dolepee/footnote-markets";
+const intakeUrl = `${repoUrl}/issues/new?template=source.yml`;
+
+const seedSources = [
   {
     id: "s1",
     creator: "Canteen research note",
     wallet: "0x26bA...63c5",
+    url: "https://thecanteenapp.com",
     title: "Why nanopayments unlock creator markets",
     excerpt:
       "The fee floor forced subscriptions. Once the unit of value falls to fractions of a cent, single citations, listens, and calls become sellable.",
@@ -15,6 +19,7 @@ const sources = [
     id: "s2",
     creator: "Open-source publisher",
     wallet: "0x7A3F...AcD",
+    url: "https://github.com/DIYgod/RSSHub",
     title: "RSS feeds as attribution rails for AI agents",
     excerpt:
       "RSS already carries canonical links and author identity. A payment layer can turn each grounded answer into a tiny creator payout.",
@@ -27,6 +32,7 @@ const sources = [
     id: "s3",
     creator: "Creator economy analyst",
     wallet: "0xBDb1...1Fb8",
+    url: "https://thecanteenapp.com",
     title: "Why subscriptions are a payment-floor workaround",
     excerpt:
       "Subscriptions bundle tiny events into a larger bill because legacy rails cannot settle the native event economically.",
@@ -39,6 +45,7 @@ const sources = [
     id: "s4",
     creator: "Arc builder",
     wallet: "0xFF3B...82D2",
+    url: "https://docs.arc.network",
     title: "USDC gas and sub-second settlement for agents",
     excerpt:
       "Arc gives agents predictable USDC-denominated settlement. That matters when the agent makes hundreds of small economic decisions.",
@@ -48,6 +55,16 @@ const sources = [
     tags: ["USDC", "agents", "settlement"],
   },
 ];
+
+const loadLocalSources = () => {
+  try {
+    return JSON.parse(localStorage.getItem("footnote-local-sources") || "[]");
+  } catch {
+    return [];
+  }
+};
+
+let sources = [...loadLocalSources(), ...seedSources];
 
 const live = {
   chainId: 5042002,
@@ -64,6 +81,8 @@ const live = {
 
 const usd = (value) => `$${Number(value).toFixed(value < 0.01 ? 4 : 2)}`;
 const arcscan = (tx) => `https://testnet.arcscan.app/tx/${tx}`;
+const xIntent = (text, url) =>
+  `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
 
 function runBuyerAgent(query, budget) {
   const tokens = query
@@ -112,6 +131,7 @@ function renderSources() {
           <span class="chip">${usd(source.price)} / citation</span>
           <span class="chip">${source.bond > 0 ? `${usd(source.bond)} bond` : "unbonded"}</span>
           <span class="chip">rep ${source.reputation}</span>
+          ${source.url ? `<a class="chip" href="${source.url}" target="_blank" rel="noreferrer">source</a>` : ""}
         </div>
       </article>
     `,
@@ -136,6 +156,7 @@ function renderReceipts() {
           <p>${body}</p>
           <div class="receipt-meta">
             <a class="chip mono" href="${arcscan(tx)}" target="_blank" rel="noreferrer">${tx.slice(0, 12)}...</a>
+            <a class="chip" href="${xIntent(`Footnote Markets receipt: ${title}. ${body}.`, arcscan(tx))}" target="_blank" rel="noreferrer">share</a>
             <span class="chip">Arc chain ${live.chainId}</span>
           </div>
         </article>
@@ -191,26 +212,59 @@ document.querySelector("#source-form").addEventListener("submit", (event) => {
   event.preventDefault();
   const creator = document.querySelector("#creator").value.trim();
   const title = document.querySelector("#title").value.trim();
+  const url = document.querySelector("#source-url").value.trim();
+  const wallet = document.querySelector("#wallet").value.trim();
   if (!creator || !title) return;
-  sources.unshift({
+  const source = {
     id: `local-${Date.now()}`,
     creator,
-    wallet: "pending wallet",
+    wallet: wallet || "pending wallet",
+    url,
     title,
     excerpt: "Creator-submitted source pending content hash and Arc bond.",
     price: Number(document.querySelector("#price").value || 0.004),
     bond: Number(document.querySelector("#bond").value || 0),
     reputation: 50,
     tags: ["submitted", "pending"],
-  });
+  };
+  sources.unshift(source);
+  const localSources = sources.filter((item) => item.id.startsWith("local-"));
+  localStorage.setItem("footnote-local-sources", JSON.stringify(localSources));
   event.target.reset();
   document.querySelector("#price").value = "0.004";
   document.querySelector("#bond").value = "0.01";
+  document.querySelector("#source-status").textContent =
+    "Source preview added locally. Submit it on GitHub so it can enter the public intake queue.";
   renderSources();
   renderAgent();
 });
 
+document.querySelector("#copy-source-packet").addEventListener("click", async () => {
+  const creator = document.querySelector("#creator").value.trim() || "[creator]";
+  const title = document.querySelector("#title").value.trim() || "[source title]";
+  const url = document.querySelector("#source-url").value.trim() || "[source url]";
+  const wallet = document.querySelector("#wallet").value.trim() || "[wallet]";
+  const price = document.querySelector("#price").value.trim() || "0.004";
+  const bond = document.querySelector("#bond").value.trim() || "0.01";
+  const packet = `Creator: ${creator}
+Source: ${title}
+URL: ${url}
+Payout wallet: ${wallet}
+Requested price per citation: ${price} USDC
+Optional credibility bond: ${bond} USDC
+Why agents should cite it: [one or two sentences]`;
+
+  try {
+    await navigator.clipboard.writeText(packet);
+    document.querySelector("#source-status").textContent =
+      "Intake packet copied. Paste it into the GitHub source intake issue.";
+  } catch {
+    document.querySelector("#source-status").textContent = packet;
+  }
+});
+
+document.querySelector("#submit-source-link").setAttribute("href", intakeUrl);
+
 renderSources();
 renderReceipts();
 renderAgent();
-

@@ -218,6 +218,10 @@ h2 {
   margin-top: 2rem;
 }
 
+.action-row.compact {
+  margin-top: 0;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -414,7 +418,8 @@ h2 {
 
 .panel p,
 .source-card p,
-.receipt-card p {
+.receipt-card p,
+.helper-text {
   color: var(--muted);
   line-height: 1.55;
 }
