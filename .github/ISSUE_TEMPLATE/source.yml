@@ -43,7 +43,7 @@ body:
     id: bond
     attributes:
       label: Optional credibility bond
-      description: Amount of USDC you are willing to bond against objective failures such as changed hash or unavailable source.
+      description: Requested USDC bond against objective failures such as changed hash or unavailable source. Operator batch registration defaults to 0 unless bond funding is explicitly approved.
       placeholder: "0.01"
   - type: textarea
     id: summary

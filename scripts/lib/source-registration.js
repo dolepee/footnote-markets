@@ -1,5 +1,4 @@
 import { resolve } from "node:path";
-import { isAddress } from "viem";
 import {
   assertArc,
   erc20Abi,
@@ -12,6 +11,7 @@ import {
   usdcUnits,
   writeJson,
 } from "./arc.js";
+import { validateSourceCandidate } from "./source-validation.js";
 
 export function marketAddressFromEnv() {
   return process.env.FOOTNOTE_MARKET || readJson(resolve(root, "docs/live/arc-testnet.json"), {}).market;
@@ -34,7 +34,15 @@ export async function registerCandidateSource(candidate, options = {}) {
   const marketAddress = options.marketAddress || marketAddressFromEnv();
   const usdcAddress = options.usdcAddress || process.env.ARC_USDC || "0x3600000000000000000000000000000000000000";
   if (!marketAddress) throw new Error("FOOTNOTE_MARKET or docs/live/arc-testnet.json market is required");
-  if (!isAddress(candidate.payoutWallet)) throw new Error(`Invalid payout wallet: ${candidate.payoutWallet}`);
+
+  const validation = validateSourceCandidate(candidate, {
+    maxPrice: options.maxPrice,
+    maxBond: options.maxBond,
+  });
+  if (!validation.valid) {
+    return { skipped: true, reason: "invalid source", validation, candidate };
+  }
+  candidate = validation.normalized;
 
   const registryPath = resolve(root, "docs/live/registered-sources.json");
   const registry = readJson(registryPath, []);
