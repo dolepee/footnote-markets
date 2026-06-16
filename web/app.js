@@ -1,5 +1,6 @@
 const repoUrl = "https://github.com/dolepee/footnote-markets";
 const intakeUrl = `${repoUrl}/issues/new?template=source.yml`;
+const intakeApiUrl = "https://api.github.com/repos/dolepee/footnote-markets/issues?labels=creator-source&state=open&per_page=20";
 
 const seedSources = [
   {
@@ -83,6 +84,52 @@ const usd = (value) => `$${Number(value).toFixed(value < 0.01 ? 4 : 2)}`;
 const arcscan = (tx) => `https://testnet.arcscan.app/tx/${tx}`;
 const xIntent = (text, url) =>
   `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+const escapeHtml = (value) =>
+  String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+const safeUrl = (value) => {
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+};
+
+function parseIssueField(body, label) {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = body.match(new RegExp(`### ${escaped}\\s+([\\s\\S]*?)(?=\\n### |$)`, "i"));
+  return match ? match[1].trim().replace(/^_No response_$/i, "") : "";
+}
+
+function issueToSource(issue) {
+  const body = issue.body || "";
+  const creator = parseIssueField(body, "Creator name") || issue.user?.login || "Creator";
+  const title = issue.title.replace(/^Creator source:\s*/i, "").trim() || "Submitted creator source";
+  const url = safeUrl(parseIssueField(body, "Source URL"));
+  const wallet = parseIssueField(body, "Arc-compatible payout wallet") || "pending wallet";
+  const price = Number(parseIssueField(body, "Requested price per citation") || 0.004);
+  const bond = Number(parseIssueField(body, "Optional credibility bond") || 0);
+  const summary = parseIssueField(body, "Why should agents cite it?") || "Creator-submitted source in public intake.";
+
+  return {
+    id: `issue-${issue.number}`,
+    creator,
+    wallet,
+    url,
+    title,
+    excerpt: summary,
+    price: Number.isFinite(price) ? price : 0.004,
+    bond: Number.isFinite(bond) ? bond : 0,
+    reputation: bond > 0 ? 58 : 50,
+    tags: ["public intake", "creator-source"],
+    issueUrl: issue.html_url,
+  };
+}
 
 function runBuyerAgent(query, budget) {
   const tokens = query
@@ -124,14 +171,15 @@ function renderSources() {
     .map(
       (source) => `
       <article class="source-card">
-        <span class="label">${source.creator}</span>
-        <h3>${source.title}</h3>
-        <p>${source.excerpt}</p>
+        <span class="label">${escapeHtml(source.creator)}</span>
+        <h3>${escapeHtml(source.title)}</h3>
+        <p>${escapeHtml(source.excerpt)}</p>
         <div class="source-meta">
           <span class="chip">${usd(source.price)} / citation</span>
           <span class="chip">${source.bond > 0 ? `${usd(source.bond)} bond` : "unbonded"}</span>
           <span class="chip">rep ${source.reputation}</span>
-          ${source.url ? `<a class="chip" href="${source.url}" target="_blank" rel="noreferrer">source</a>` : ""}
+          ${safeUrl(source.url) ? `<a class="chip" href="${safeUrl(source.url)}" target="_blank" rel="noreferrer">source</a>` : ""}
+          ${safeUrl(source.issueUrl) ? `<a class="chip" href="${safeUrl(source.issueUrl)}" target="_blank" rel="noreferrer">intake</a>` : ""}
         </div>
       </article>
     `,
@@ -152,8 +200,8 @@ function renderReceipts() {
       return `
         <article class="receipt-card">
           <span class="badge ${badge}">${badge}</span>
-          <h3>${title}</h3>
-          <p>${body}</p>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(body)}</p>
           <div class="receipt-meta">
             <a class="chip mono" href="${arcscan(tx)}" target="_blank" rel="noreferrer">${tx.slice(0, 12)}...</a>
             <a class="chip" href="${xIntent(`Footnote Markets receipt: ${title}. ${body}.`, arcscan(tx))}" target="_blank" rel="noreferrer">share</a>
@@ -183,8 +231,8 @@ function renderAgent() {
       <div class="timeline-item">
         <span class="badge ${decision.decision.toLowerCase()}">${decision.decision}</span>
         <span>
-          <strong>${decision.source.title}</strong><br />
-          <small>${decision.reason} Score ${decision.score}. Price ${usd(decision.source.price)}.</small>
+          <strong>${escapeHtml(decision.source.title)}</strong><br />
+          <small>${escapeHtml(decision.reason)} Score ${decision.score}. Price ${usd(decision.source.price)}.</small>
         </span>
         <span class="mono">${decision.source.bond > 0 ? "bonded" : "unbonded"}</span>
       </div>
@@ -196,9 +244,27 @@ function renderAgent() {
     "Nanopayments matter because they make the native unit of research sellable: a single citation. Legacy rails pushed creators into subscriptions because the per-event value was too small to settle. On Arc, an agent can allocate a USDC budget across sources, pay the trustworthy ones, refuse weak or overpriced sources, and leave receipts for both outcomes.";
 
   document.querySelector("#answer-footnotes").innerHTML = [
-    ...paid.map((decision) => `<span class="chip">paid footnote: ${decision.source.creator}</span>`),
-    ...refused.map((decision) => `<span class="chip">refused: ${decision.source.creator}</span>`),
+    ...paid.map((decision) => `<span class="chip">paid footnote: ${escapeHtml(decision.source.creator)}</span>`),
+    ...refused.map((decision) => `<span class="chip">refused: ${escapeHtml(decision.source.creator)}</span>`),
   ].join("");
+}
+
+async function loadPublicIntakeSources() {
+  const status = document.querySelector("#source-status");
+  try {
+    const response = await fetch(intakeApiUrl, { headers: { Accept: "application/vnd.github+json" } });
+    if (!response.ok) return;
+    const issues = await response.json();
+    const issueSources = issues.filter((issue) => !issue.pull_request).map(issueToSource);
+    if (issueSources.length === 0) return;
+    const existing = new Set(sources.map((source) => source.id));
+    sources = [...issueSources.filter((source) => !existing.has(source.id)), ...sources];
+    status.textContent = `${issueSources.length} public creator source${issueSources.length === 1 ? "" : "s"} loaded from GitHub intake.`;
+    renderSources();
+    renderAgent();
+  } catch {
+    status.textContent = "Public intake is still open; GitHub source sync is temporarily unavailable.";
+  }
 }
 
 document.querySelector("#ask-form").addEventListener("submit", (event) => {
@@ -268,3 +334,4 @@ document.querySelector("#submit-source-link").setAttribute("href", intakeUrl);
 renderSources();
 renderReceipts();
 renderAgent();
+loadPublicIntakeSources();
