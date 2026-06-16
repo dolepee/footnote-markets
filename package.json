@@ -1,0 +1,16 @@
+{
+  "name": "footnote-markets",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "contracts:test": "cd contracts && forge test",
+    "contracts:build": "cd contracts && forge build",
+    "deploy:market": "node scripts/deploy-footnote-market.mjs",
+    "spike:live": "node scripts/run-live-spike.mjs"
+  },
+  "dependencies": {
+    "viem": "^2.44.0"
+  }
+}
+

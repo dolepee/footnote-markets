@@ -1,0 +1,22 @@
+{
+  "chainId": 5042002,
+  "market": "0xe12bced9df4d1347a998499d1c2f559fa1594d21",
+  "actor": "0x26bA923FbbB4404395E61f94Ca4b39823A1763c5",
+  "sourceId": "1",
+  "paidReceiptId": "1",
+  "price": "0.003",
+  "bond": "0.05",
+  "remainingBond": "0.047",
+  "reputation": "-10",
+  "startingBalance": "1.80543",
+  "endingBalance": "1.738543",
+  "txs": {
+    "approve": "0x87027d185a10f4215b4e94d39198b10b4b92656666f6e4c4703f8cffe1fe3314",
+    "register": "0xa6c07171e79292a6bfecca876bdff2ac6b936e09d59dd958ea4e1768596a49f1",
+    "pay": "0xf4f8f9fb122a88981a7a74a07480c1138993150dce34ebcce657d06912547bd9",
+    "refuse": "0x2af0942ceb5b0333019353473121f1749e6ef05869ca8af404866e822070a8b3",
+    "updateHash": "0xf397f754b4e48144929c27ef284a7fcb82ed8a6ad6fbcdcd115e6a167156daae",
+    "challenge": "0x078b8b8ce02c1d2f620c45f1ae48bf898e03f6eb9b1fae5269fba41ec08b0246"
+  },
+  "completedAt": "2026-06-16T10:50:33.478Z"
+}
